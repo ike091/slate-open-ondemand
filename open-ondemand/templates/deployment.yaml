@@ -15,10 +15,16 @@ spec:
         {{- include "open-ondemand.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "open-ondemand.serviceAccountName" . }}
+      volumes:
+        - name: shared-data
+          emptyDir: {}
       containers:
         - name: open-ondemand 
           image: jstidd/open-ondemand
           imagePullPolicy: Always
+          volumeMounts:
+            - name: shared-data
+              mountPath: /shared
           ports:
             - name: http
               containerPort: 80
@@ -26,9 +32,11 @@ spec:
         - name: keycloak
           image: jstidd/keycloak
           imagePullPolicy: Always
+          volumeMounts:
+            - name: shared-data
+              mountPath: /shared
           ports:
-            - name: kc
-              containerPort: 8443
+            - name: kc8080
+              containerPort: 8080
               protocol: TCP
-
               

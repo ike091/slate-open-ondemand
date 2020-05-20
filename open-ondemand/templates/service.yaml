@@ -8,8 +8,10 @@ spec:
   type: NodePort
   ports:
     - port: 80
-      targetPort: 
       protocol: TCP
       name: http
+    - port: 8080
+      protocol: TCP
+      name: kc8080
   selector:
     {{- include "open-ondemand.selectorLabels" . | nindent 4 }}
