@@ -15,3 +15,28 @@ spec:
       name: kc8080
   selector:
     {{- include "open-ondemand.selectorLabels" . | nindent 4 }}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "open-ondemand.fullname" . }}-ood
+  labels:
+    {{- include "open-ondemand.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: slate
+spec:
+  rules:
+  - host: ondemand.{{ .Values.SLATE.Cluster.DNSName}}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ include "open-ondemand.fullname" . }}
+          servicePort: 80
+  - host: keycloak.{{ .Values.SLATE.Cluster.DNSName}}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ include "open-ondemand.fullname" . }}
+          servicePort: 8080

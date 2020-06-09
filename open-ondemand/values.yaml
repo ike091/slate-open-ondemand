@@ -29,3 +29,8 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+  #
+
+SLATE:
+  Cluster:
+    DNSName: "utah-dev.slateci.net"
