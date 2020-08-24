@@ -43,8 +43,8 @@ spec:
           image: centos:7
           imagePullPolicy: Always
           volumeMounts:
-            - name: ood-volume
-              mountPath: /ood-data
+            - name: shared-data
+              mountPath: /shared
           ports:
             - name: ssh
               containerPort: 22
