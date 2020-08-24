@@ -39,4 +39,14 @@ spec:
             - name: kc8080
               containerPort: 8080
               protocol: TCP
+        - name: ood-island
+          image: centos:7
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: ood-volume
+              mountPath: /ood-data
+          ports:
+            - name: ssh
+              containerPort: 22
+              protocol: TCP
               
