@@ -19,8 +19,8 @@ spec:
         - name: shared-data
           emptyDir: {}
       containers:
-        - name: open-ondemand 
-          image: skoutes/open-ondemand
+        - name: open-ondemand
+          image: dockerbox88/open-ondemand
           imagePullPolicy: Always
           volumeMounts:
             - name: shared-data
@@ -39,14 +39,4 @@ spec:
             - name: kc8080
               containerPort: 8080
               protocol: TCP
-        - name: ood-island
-          image: skoutes/open-ondemand-island
-          imagePullPolicy: Always
-          volumeMounts:
-            - name: shared-data
-              mountPath: /shared
-          ports:
-            - name: ssh
-              containerPort: 22
-              protocol: TCP
-              
+---
