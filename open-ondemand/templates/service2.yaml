@@ -2,9 +2,9 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "open-ondemand.fullname" . }}-ood-isand
+  name: {{ include "open-ondemand.fullname" . }}-island
   labels:
-    {{- include "open-ondemand.labels" . | nindent 4 }}-ood-island
+    {{- include "open-ondemand.labels" . | nindent 4 }}-island
   annotations:
     kubernetes.io/ingress.class: slate
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
