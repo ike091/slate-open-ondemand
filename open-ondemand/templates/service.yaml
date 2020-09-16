@@ -47,3 +47,19 @@ spec:
           serviceName: {{ include "open-ondemand.fullname" . }}
           servicePort: 8080
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "open-ondemand.fullname" . }}-island
+  labels:
+    {{- include "open-ondemand.labels" . | nindent 4 }}-island
+  annotations:
+    kubernetes.io/ingress.class: slate
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ports:
+    - port: 22
+  type: ClusterIP
+  selector:
+    {{- include "open-ondemand.selectorLabels" . | nindent 4 }}-island
+---
