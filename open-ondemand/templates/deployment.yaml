@@ -18,6 +18,17 @@ spec:
       volumes:
         - name: shared-data
           emptyDir: {}
+      initContainers:
+        - name: open-ondemand-init
+          image: centos:7
+          volumeMounts:
+          - name: shared-data
+            mountpath: /shared
+          command: ["/bin/bash"]
+          args: ["ssh-keygen ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -q -N "" \
+          ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -q -N "" \
+          ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -q -N "" \
+          ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -q -N """]
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
