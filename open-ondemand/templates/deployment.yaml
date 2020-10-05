@@ -84,5 +84,5 @@ spec:
               protocol: TCP
           env:
             - name: CHART_NAME
-              value: {{- include "open-ondemand.chart" -}}
+              value: {{- include "open-ondemand.chart" . | nindent 14 }}
 ---
