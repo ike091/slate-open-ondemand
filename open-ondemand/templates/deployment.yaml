@@ -83,6 +83,6 @@ spec:
               containerPort: 22
               protocol: TCP
           env:
-            - name: CHART_NAME
+            - name: INSTANCE_NAME
               value: {{ include "open-ondemand.name" . }}
 ---
