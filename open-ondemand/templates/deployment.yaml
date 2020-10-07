@@ -18,17 +18,6 @@ spec:
       volumes:
         - name: shared-data
           emptyDir: {}
-      initContainers:
-        - name: open-ondemand-init
-          image: centos:7
-          volumeMounts:
-          - name: shared-data
-            mountPath: /shared
-          command: ['/bin/bash']
-          args: ['-c', 'yum install openssh-clients -y', 'ssh-keygen ssh-keygen -t rsa -f /shared/ssh_host_rsa_key -q -N ""', \
-          'ssh-keygen -t dsa -f /shared/ssh_host_dsa_key -q -N ""', \
-          'ssh-keygen -t ecdsa -f /shared/ssh_host_ecdsa_key -q -N ""', \
-          'ssh-keygen -t ed25519 -f /shared/ssh_host_ed25519_key -q -N ""']
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
