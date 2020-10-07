@@ -66,7 +66,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "open-ondemand.fullname" . }}
+  name: {{ include "open-ondemand.fullname" . }}-clusterIP
   labels:
     {{- include "open-ondemand.labels" . | nindent 4 }}
   annotations:
