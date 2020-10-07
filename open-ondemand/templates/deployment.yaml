@@ -84,5 +84,5 @@ spec:
               protocol: TCP
           env:
             - name: INSTANCE_NAME
-              value: {{ include "open-ondemand.name" . }}
+              value: {{ include "open-ondemand.fullname" . }}
 ---
