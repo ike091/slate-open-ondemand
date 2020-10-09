@@ -29,6 +29,9 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          env:
+            - name: INSTANCE_NAME
+              value: {{ include "open-ondemand.fullname" . }}
         - name: keycloak
           image: jstidd/keycloak
           imagePullPolicy: Always
