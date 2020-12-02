@@ -28,8 +28,8 @@ metadata:
 spec:
   tls:
   - hosts:
-    - ondemand.{{ .Values.SLATE.Cluster.DNSName}}
-    - keycloak.{{ .Values.SLATE.Cluster.DNSName}}
+    - {{ .Values.Instance }}.ondemand.{{ .Values.SLATE.Cluster.DNSName}}
+    - {{ .Values.Instance }}.keycloak.{{ .Values.SLATE.Cluster.DNSName}}
     secretName: {{ .Values.Instance}}-open-ondemand
   rules:
   - host: ondemand.{{ .Values.SLATE.Cluster.DNSName}}
