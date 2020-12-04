@@ -14,11 +14,6 @@ spec:
       labels:
         {{- include "open-ondemand.selectorLabels" . | nindent 8 }}
     spec:
-      hostNetwork: true
-      hostAliases:
-      - ip: "155.101.6.140"
-      hostnames:
-        - "utah-dev1.chpc.utah.edu"
       serviceAccountName: {{ include "open-ondemand.serviceAccountName" . }}
       volumes:
         - name: shared-data
