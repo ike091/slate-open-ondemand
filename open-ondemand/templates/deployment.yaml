@@ -50,14 +50,4 @@ spec:
             - name: kc8080
               containerPort: 8080
               protocol: TCP
-        - name: ondemand-island
-          image: dockerbox88/open-ondemand-island
-          imagePullPolicy: Always
-          volumeMounts:
-            - name: shared-data
-              mountPath: /shared
-          ports:
-            - name: ssh
-              containerPort: 2222
-              protocol: TCP
 ---
