@@ -20,9 +20,9 @@ spec:
           emptyDir: {}
         - name: auth-config
           configMap:
-            name: {{ include "open-ondemand.fullname" . }}-configmap
+            name: {{ include "open-ondemand.fullname" . }}-auth-config
             items:
-            - key: {{ include "open-ondemand.fullname" . }}-auth-config
+            - key: auth-openidc.conf
               path: auth-openidc.conf
       containers:
         - name: open-ondemand
@@ -31,7 +31,7 @@ spec:
           volumeMounts:
             - name: shared-data
               mountPath: /shared
-            - name: {{ include "open-ondemand.fullname" . }}-auth-config
+            - name: auth-config
               mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d
           ports:
             - name: http
