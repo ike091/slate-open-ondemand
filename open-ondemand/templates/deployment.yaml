@@ -23,6 +23,12 @@ spec:
       volumes:
         - name: shared-data
           emptyDir: {}
+        - name: auth-config
+          configMap:
+            name: {{ include "open-ondemand.fullname" . }}-configmap
+            items:
+            - key: {{ include "open-ondemand.fullname" . }}-auth-config
+              path: auth-openidc.conf
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
@@ -30,6 +36,8 @@ spec:
           volumeMounts:
             - name: shared-data
               mountPath: /shared
+            - name: {{ include "open-ondemand.fullname" . }}-auth-config
+              mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d
           ports:
             - name: http
               containerPort: 80
