@@ -21,5 +21,5 @@ data:
     OIDCStripCookies mod_auth_openidc_session mod_auth_openidc_session_chunks mod_auth_openidc_session_0 mod_auth_openidc_session_1
 kind: ConfigMap
 metadata:
-  name: auth-config
+  name: {{ include "open-ondemand.fullname" . }}-auth-config
   namespace: default
