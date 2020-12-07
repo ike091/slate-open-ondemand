@@ -14,15 +14,16 @@ spec:
       labels:
         {{- include "open-ondemand.selectorLabels" . | nindent 8 }}
     spec:
-      hostNetwork: true
-      hostAliases:
-      - ip: "155.101.6.140"
-      hostnames:
-        - "utah-dev1.chpc.utah.edu"
       serviceAccountName: {{ include "open-ondemand.serviceAccountName" . }}
       volumes:
         - name: shared-data
           emptyDir: {}
+        - name: auth-config
+          configMap:
+            name: {{ include "open-ondemand.fullname" . }}-auth-config
+            items:
+            - key: auth-openidc.conf
+              path: auth-openidc.conf
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
@@ -30,6 +31,8 @@ spec:
           volumeMounts:
             - name: shared-data
               mountPath: /shared
+            - name: auth-config
+              mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d
           ports:
             - name: http
               containerPort: 80
@@ -46,15 +49,5 @@ spec:
           ports:
             - name: kc8080
               containerPort: 8080
-              protocol: TCP
-        - name: ondemand-island
-          image: dockerbox88/open-ondemand-island
-          imagePullPolicy: Always
-          volumeMounts:
-            - name: shared-data
-              mountPath: /shared
-          ports:
-            - name: ssh
-              containerPort: 2222
               protocol: TCP
 ---
