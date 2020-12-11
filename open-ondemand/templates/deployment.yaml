@@ -22,8 +22,8 @@ spec:
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-auth-config
             items:
-            - key: auth-openidc.conf
-              path: auth-openidc.conf
+            - key: auth_openidc.conf
+              path: auth_openidc.conf
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand

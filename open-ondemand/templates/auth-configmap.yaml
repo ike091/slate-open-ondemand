@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  auth-openidc.conf: |
+  auth_openidc.conf: |
     OIDCProviderMetadataURL https://keycloak.utah-dev.slateci.net/auth/realms/ondemand/.well-known/openid-configuration
     OIDCClientID        "account"
     OIDCClientSecret    "1111111-1111-1111-1111-111111111111"
@@ -17,8 +17,6 @@ data:
     # Don't pass claims to backend servers
     OIDCPassClaimsAs environment
 
-    TEST-FILE
-    
     # Strip out session cookies before passing to backend
     OIDCStripCookies mod_auth_openidc_session mod_auth_openidc_session_chunks mod_auth_openidc_session_0 mod_auth_openidc_session_1
 kind: ConfigMap
