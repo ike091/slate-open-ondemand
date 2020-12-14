@@ -8,16 +8,10 @@
 # /opt/keycloak-4.8.3.final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user    admin --password keycloakpass
 
 # Retry until command succeeds
-# while [ $? -ne 0 ]; do
-	# /opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS
-	# # wait ten seconds before trying again
-	# sleep 10
-# done
-
 n=0
 until [ "$n" -ge 5 ]
 do
-	/opt/keycloak-4.8.3.final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user    admin --password keycloakpass && break
+	/opt/keycloak-4.8.3.final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS && break
 	n=$((n+1)) 
 	sleep 5
 done
