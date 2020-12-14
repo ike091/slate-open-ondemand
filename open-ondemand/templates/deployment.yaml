@@ -30,6 +30,10 @@ spec:
             items:
             - key: ood_portal.yml
               path: ood_portal.yml
+        - name: keycloak-setup
+          configMap:
+            name: keycloak-setup
+            defaultMode: 0744 
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
@@ -41,6 +45,7 @@ spec:
               mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d
             - name: ood-portal-config
               mountPath: /etc/ood/config
+            - name: keycloak-setup
           ports:
             - name: http
               containerPort: 80
@@ -54,6 +59,8 @@ spec:
           volumeMounts:
             - name: shared-data
               mountPath: /shared
+            - name: keycloak-setup
+              mountPath: /etc/keycloak/
           ports:
             - name: kc8080
               containerPort: 8080
