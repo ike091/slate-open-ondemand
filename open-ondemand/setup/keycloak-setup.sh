@@ -4,9 +4,6 @@
 # Currently needs to be run inside Keycloak container, in directory containing kcadm.sh script.
 
 
-# Disable exit on non-0 exit code
-set -e 
-
 # Try to setup API access credentials
 /opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user    admin --password KEYCLOAKPASS
 
