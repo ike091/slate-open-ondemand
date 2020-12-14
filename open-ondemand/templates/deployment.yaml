@@ -22,8 +22,14 @@ spec:
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-auth-config
             items:
-            - key: auth-openidc.conf
-              path: auth-openidc.conf
+            - key: auth_openidc.conf
+              path: auth_openidc.conf
+        - name: ood-portal-config
+          configMap:
+            name: {{ include "open-ondemand.fullname" . }}-ood-portal
+            items:
+            - key: ood_portal.yml
+              path: ood_portal.yml
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
@@ -33,6 +39,8 @@ spec:
               mountPath: /shared
             - name: auth-config
               mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d
+            - name: ood-portal-config
+              mountPath: /etc/ood/config
           ports:
             - name: http
               containerPort: 80
