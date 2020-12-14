@@ -32,7 +32,7 @@ spec:
               path: ood_portal.yml
         - name: keycloak-setup
           configMap:
-            name: keycloak-setup
+            name: {{ include "open-ondemand.fullname" . }}-keycloak-setup
             defaultMode: 0744 
       containers:
         - name: open-ondemand
