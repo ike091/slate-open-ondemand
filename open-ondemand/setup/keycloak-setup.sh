@@ -4,14 +4,11 @@
 # Currently needs to be run inside Keycloak container, in directory containing kcadm.sh script.
 
 
-# Try to setup API access credentials
-# /opt/keycloak-4.8.3.final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user    admin --password keycloakpass
-
-# Retry until command succeeds
+# Try to setup API access credentials and retry up to five times
 n=0
 until [ "$n" -ge 5 ]
 do
-	/opt/keycloak-4.8.3.final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS && break
+	/opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS && break
 	n=$((n+1)) 
 	sleep 5
 done
