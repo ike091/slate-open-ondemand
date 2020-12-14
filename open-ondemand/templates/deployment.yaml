@@ -55,6 +55,10 @@ spec:
         - name: keycloak
           image: jstidd/keycloak
           imagePullPolicy: Always
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "/etc/keycloak/keycloak-setup.sh"]
           volumeMounts:
             - name: shared-data
               mountPath: /shared
