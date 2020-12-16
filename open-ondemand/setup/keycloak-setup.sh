@@ -3,6 +3,7 @@
 # Uses the keycloak-cli to setup LDAP and Kerberos authentication through keycloak.
 # Currently needs to be run inside Keycloak container, in directory containing kcadm.sh script.
 
+# Make sure volume exists
 # Retrieve keycloak password from volume
 password=`cat /secret-volume/password`
 

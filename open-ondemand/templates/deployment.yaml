@@ -71,6 +71,9 @@ spec:
               mountPath: /etc/keycloak/
             - name: secret-volume
               mountPath: /secret-volume
+          env:
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "true" 
           ports:
             - name: kc8080
               containerPort: 8080
