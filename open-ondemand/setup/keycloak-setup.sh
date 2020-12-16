@@ -3,12 +3,14 @@
 # Uses the keycloak-cli to setup LDAP and Kerberos authentication through keycloak.
 # Currently needs to be run inside Keycloak container, in directory containing kcadm.sh script.
 
+# Retrieve keycloak password from volume
+password=`cat /secret-volume/password`
 
 # Try to setup API access credentials and retry up to five times
 n=0
 until [ "$n" -ge 5 ]
 do
-	/opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS && break
+	/opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password $password && break
 	n=$((n+1)) 
 	sleep 5
 done
