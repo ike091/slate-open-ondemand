@@ -55,7 +55,7 @@ spec:
             - name: INSTANCE_NAME
               value: {{ include "open-ondemand.fullname" . }}
         - name: keycloak
-          image: dockerbox88/keycloak
+          image: dockerbox88/keycloak-ondemand
           imagePullPolicy: Always
           lifecycle:
             postStart:
