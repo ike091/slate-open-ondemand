@@ -5,13 +5,13 @@
 
 
 # Try to setup API access credentials and retry up to five times
-n=0
-until [ "$n" -ge 5 ]
-do
-	/opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS && break
-	n=$((n+1)) 
-	sleep 5
-done
+#n=0
+#until [ "$n" -ge 5 ]
+#do
+#	/opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS && break
+#	n=$((n+1)) 
+#	sleep 5
+#done
 
 # Setup credentials
 # ./kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS
@@ -20,7 +20,7 @@ done
 
 
 # Create realm
-/opt/keycloak-4.8.3.Final/bin/kcadm.sh create realms -s realm=test -s enabled=true
+#/opt/keycloak-4.8.3.Final/bin/kcadm.sh create realms -s realm=test -s enabled=true
 
 
 # TODO: fix login with email and remember me settings
