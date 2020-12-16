@@ -28,18 +28,18 @@ metadata:
 spec:
   tls:
   - hosts:
-    - ondemand.{{ .Values.SLATE.Cluster.DNSName}}
-    - keycloak.{{ .Values.SLATE.Cluster.DNSName}}
+    - {{ .Values.Instance }}.ondemand.{{ .Values.SLATE.Cluster.DNSName }}
+    - {{ .Values.Instance }}.keycloak.{{ .Values.SLATE.Cluster.DNSName }}
     secretName: {{ .Values.Instance}}-open-ondemand
   rules:
-  - host: ondemand.{{ .Values.SLATE.Cluster.DNSName}}
+  - host: {{ .Values.Instance }}.ondemand.{{ .Values.SLATE.Cluster.DNSName }}
     http:
       paths:
       - path: /
         backend:
           serviceName: {{ include "open-ondemand.fullname" . }}
           servicePort: 80
-  - host: keycloak.{{ .Values.SLATE.Cluster.DNSName}}
+  - host: {{ .Values.Instance }}.keycloak.{{ .Values.SLATE.Cluster.DNSName }}
     http:
       paths:
       - path: /
