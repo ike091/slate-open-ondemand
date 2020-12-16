@@ -35,7 +35,7 @@ spec:
             defaultMode: 0744 
         - name: secret-volume
           secret:
-            secretName: keycloak-password
+            secretName: {{ include "open-ondemand.fullname" . }}-keycloak-password
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
