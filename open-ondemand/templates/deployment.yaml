@@ -57,10 +57,13 @@ spec:
         - name: keycloak
           image: dockerbox88/keycloak-ondemand
           imagePullPolicy: Always
+          # Run script if setupKeycloak parameter is enabled.
+          {{ if eq .Values.setupKeycloak true }}
           lifecycle:
             postStart:
               exec:
                 command: ["/bin/bash", "/etc/keycloak/keycloak-setup.sh"]
+          {{ end }}
           volumeMounts:
             - name: shared-data
               mountPath: /shared
