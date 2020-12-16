@@ -14,7 +14,6 @@ spec:
       labels:
         {{- include "open-ondemand.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "open-ondemand.serviceAccountName" . }}
       volumes:
         - name: shared-data
           emptyDir: {}
@@ -30,6 +29,10 @@ spec:
             items:
             - key: ood_portal.yml
               path: ood_portal.yml
+        - name: keycloak-setup
+          configMap:
+            name: {{ include "open-ondemand.fullname" . }}-keycloak-setup
+            defaultMode: 0744 
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
@@ -51,9 +54,15 @@ spec:
         - name: keycloak
           image: jstidd/keycloak
           imagePullPolicy: Always
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "/etc/keycloak/keycloak-setup.sh"]
           volumeMounts:
             - name: shared-data
               mountPath: /shared
+            - name: keycloak-setup
+              mountPath: /etc/keycloak/
           ports:
             - name: kc8080
               containerPort: 8080
