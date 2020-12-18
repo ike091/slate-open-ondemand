@@ -49,8 +49,8 @@ spec:
               mountPath: /shared
             - name: auth-config
               mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d
-            - name: ood-portal-config
-              mountPath: /etc/ood/config
+#            - name: ood-portal-config
+#              mountPath: /etc/ood/config
           ports:
             - name: http
               containerPort: 80
