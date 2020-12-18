@@ -36,13 +36,10 @@ spec:
         - name: secret-volume
           secret:
             secretName: {{ include "open-ondemand.fullname" . }}-keycloak-password
-
-        # Database volume stuff here
+        # Claim SLATE volume to persist Keycloak data.
         - name: keycloak-db
           persistentVolumeClaim:
             claimName: {{ .Values.claimName }}
-        # End database volume stuff
-
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
@@ -62,9 +59,7 @@ spec:
             - name: INSTANCE_NAME
               value: {{ include "open-ondemand.fullname" . }}
         - name: keycloak
-          # TODO: change back image at some point
-          # image: dockerbox88/keycloak-ondemand
-          image: jstidd/keycloak
+          image: dockerbox88/keycloak-ondemand
           imagePullPolicy: Always
           # Run script if setupKeycloak parameter is enabled.
           {{ if eq .Values.setupKeycloak true }}
@@ -80,8 +75,8 @@ spec:
               mountPath: /etc/keycloak/
             - name: secret-volume
               mountPath: /secret-volume
+              # Mount SLATE volume to the location of the Keycloak database.
             - name: keycloak-db
-              # TODO: make sure this path is correct
               mountPath: "/opt/keycloak-4.8.3.Final/standalone/data"
           env:
             - name: PROXY_ADDRESS_FORWARDING
