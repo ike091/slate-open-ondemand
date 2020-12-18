@@ -40,7 +40,7 @@ spec:
         # Database volume stuff here
         - name: keycloak-db
           persistentVolumeClaim:
-            claimName: {{ .Values.Keycloak.DBVolume }}
+            claimName: {{ .Values.claimName }}
         # End database volume stuff
 
       containers:
