@@ -7,6 +7,8 @@ Instance: "global"
 
 replicaCount: 1
 
+setupKeycloak: false
+
 SLATE:
   Cluster:
     DNSName: "utah-dev.slateci.net"
