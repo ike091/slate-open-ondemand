@@ -9,6 +9,10 @@ replicaCount: 1
 
 setupKeycloak: false
 
+
+
+claimName: {{ .Values.Keycloak.DBVolume }}
+
 SLATE:
   Cluster:
     DNSName: "utah-dev.slateci.net"
