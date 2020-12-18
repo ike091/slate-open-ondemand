@@ -41,11 +41,6 @@ spec:
         - name: keycloak-db
           persistentVolumeClaim:
             claimName: {{ .Values.Keycloak.DBVolume }}
-
-            # TODO: mount volume in proper container
-        # volumeMount:
-            # - name: keycloak-db
-          # mountPath: /path/to/keycloak/stuff
         # End database volume stuff
 
       containers:
@@ -85,6 +80,9 @@ spec:
               mountPath: /etc/keycloak/
             - name: secret-volume
               mountPath: /secret-volume
+            - name: keycloak-db
+              # TODO: make sure this path is correct
+              mountPath: "/opt/keycloak-4.8.3.Final/standalone/data"
           env:
             - name: PROXY_ADDRESS_FORWARDING
               value: "true" 

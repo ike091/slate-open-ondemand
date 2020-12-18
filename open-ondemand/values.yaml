@@ -9,9 +9,7 @@ replicaCount: 1
 
 setupKeycloak: false
 
-
-
-claimName: {{ .Values.Keycloak.DBVolume }}
+claimName: keycloak-db
 
 SLATE:
   Cluster:
