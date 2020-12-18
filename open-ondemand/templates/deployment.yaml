@@ -36,6 +36,18 @@ spec:
         - name: secret-volume
           secret:
             secretName: {{ include "open-ondemand.fullname" . }}-keycloak-password
+
+        # Database volume stuff here
+        - name: keycloak-db
+          persistentVolumeClaim:
+            claimName: {{ .Values.Keycloak.DBVolume }}
+
+            # TODO: mount volume in proper container
+        # volumeMount:
+            # - name: keycloak-db
+          # mountPath: /path/to/keycloak/stuff
+        # End database volume stuff
+
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
