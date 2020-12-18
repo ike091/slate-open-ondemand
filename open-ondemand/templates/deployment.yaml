@@ -23,12 +23,12 @@ spec:
             items:
             - key: auth_openidc.conf
               path: auth_openidc.conf
-        - name: ood-portal-config
-          configMap:
-            name: {{ include "open-ondemand.fullname" . }}-ood-portal
-            items:
-            - key: ood_portal.yml
-              path: ood_portal.yml
+#        - name: ood-portal-config
+#          configMap:
+#            name: {{ include "open-ondemand.fullname" . }}-ood-portal
+#            items:
+#            - key: ood_portal.yml
+#              path: ood_portal.yml
         - name: keycloak-setup
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-keycloak-setup
