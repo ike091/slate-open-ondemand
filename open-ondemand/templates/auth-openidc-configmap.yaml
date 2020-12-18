@@ -4,7 +4,7 @@ data:
     OIDCProviderMetadataURL https://keycloak.utah-dev.slateci.net/auth/realms/ondemand/.well-known/openid-configuration
     OIDCClientID        "account"
     OIDCClientSecret    "1111111-1111-1111-1111-111111111111"
-    OIDCRedirectURI      https://ondemand.utah-dev.slateci.net/oidc
+    OIDCRedirectURI      https://{{ .Values.Instance }}.ondemand.{{ .Values.SLATE.Cluster.DNSName }}/oidc
     OIDCCryptoPassphrase "d14e5b4c8e6257ea81830f23c2be4633ad04d3af9816affdda6d8fec8ea926a000ca47b507587dc5"
     
     # Keep sessions alive for 8 hours
