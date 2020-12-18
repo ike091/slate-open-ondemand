@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
   auth_openidc.conf: |
-    OIDCProviderMetadataURL https://keycloak.utah-dev.slateci.net/auth/realms/ondemand/.well-known/openid-configuration
+    OIDCProviderMetadataURL https://{{ .Values.Instance }}.keycloak.{{ .Values.SLATE.Cluster.DNSName }}/auth/realms/ondemand/.well-known/openid-configuration
     OIDCClientID        "account"
     OIDCClientSecret    "1111111-1111-1111-1111-111111111111"
     OIDCRedirectURI      https://{{ .Values.Instance }}.ondemand.{{ .Values.SLATE.Cluster.DNSName }}/oidc
