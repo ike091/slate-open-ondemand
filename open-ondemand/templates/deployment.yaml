@@ -36,6 +36,10 @@ spec:
         - name: secret-volume
           secret:
             secretName: {{ include "open-ondemand.fullname" . }}-keycloak-password
+        # Claim SLATE volume to persist Keycloak data.
+        - name: keycloak-db
+          persistentVolumeClaim:
+            claimName: {{ .Values.claimName }}
       containers:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
@@ -71,6 +75,9 @@ spec:
               mountPath: /etc/keycloak/
             - name: secret-volume
               mountPath: /secret-volume
+              # Mount SLATE volume to the location of the Keycloak database.
+            - name: keycloak-db
+              mountPath: "/opt/keycloak-4.8.3.Final/standalone/data"
           env:
             - name: PROXY_ADDRESS_FORWARDING
               value: "true" 
