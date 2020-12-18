@@ -67,7 +67,9 @@ spec:
             - name: INSTANCE_NAME
               value: {{ include "open-ondemand.fullname" . }}
         - name: keycloak
-          image: dockerbox88/keycloak-ondemand
+          # TODO: change back image at some point
+          # image: dockerbox88/keycloak-ondemand
+          image: jstidd/keycloak
           imagePullPolicy: Always
           # Run script if setupKeycloak parameter is enabled.
           {{ if eq .Values.setupKeycloak true }}
