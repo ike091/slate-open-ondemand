@@ -23,12 +23,12 @@ spec:
             items:
             - key: auth_openidc.conf
               path: auth_openidc.conf
-#        - name: ood-portal-config
-#          configMap:
-#            name: {{ include "open-ondemand.fullname" . }}-ood-portal
-#            items:
-#            - key: ood_portal.yml
-#              path: ood_portal.yml
+        - name: ood-portal-config
+          configMap:
+            name: {{ include "open-ondemand.fullname" . }}-ood-portal
+            items:
+            - key: ood_portal.yml
+              path: ood_portal.yml
         - name: keycloak-setup
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-keycloak-setup
@@ -49,8 +49,8 @@ spec:
               mountPath: /shared
             - name: auth-config
               mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d
-#            - name: ood-portal-config
-#              mountPath: /etc/ood/config
+            - name: ood-portal-config
+              mountPath: /etc/ood/config
           ports:
             - name: http
               containerPort: 80
