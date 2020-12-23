@@ -22,7 +22,7 @@ spec:
             name: {{ include "open-ondemand.fullname" . }}-auth-config
             items:
             - key: auth_openidc.conf
-              path: /opt/rh/httpd24/root/etc/httpd/conf.d/auth_openidc.conf
+              path: auth_openidc.conf
         - name: ood-portal-config
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-ood-portal
