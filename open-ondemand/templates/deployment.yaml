@@ -23,7 +23,6 @@ spec:
             items:
             - key: auth_openidc.conf
               path: /opt/rh/httpd24/root/etc/httpd/conf.d/auth_openidc.conf
-              subPath: auth_openidc.conf
         - name: ood-portal-config
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-ood-portal
@@ -50,6 +49,7 @@ spec:
               mountPath: /shared
             - name: auth-config
               mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d
+              subPath: auth_openidc.conf
             - name: ood-portal-config
               mountPath: /etc/ood/config
           ports:
