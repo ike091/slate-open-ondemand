@@ -48,7 +48,7 @@ spec:
             - name: shared-data
               mountPath: /shared
             - name: auth-config
-              mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d
+              mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d/auth_openidc.conf
               subPath: auth_openidc.conf
             - name: ood-portal-config
               mountPath: /etc/ood/config
