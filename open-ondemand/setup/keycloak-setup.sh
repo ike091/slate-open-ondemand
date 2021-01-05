@@ -45,15 +45,30 @@ $keycloak create realms -s realm=ondemand -s enabled=true
 
 client_id="ondemand-dev.hpc.osc.edu"
 
-$keycloak create client -r ondemand -s clientId=$client_id -s enabled=true -s clientProtocol=openid-connect
+$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false
 
 
-# TODO: Get client-id
-echo $client_id > /shared/client-id
+# TODO: Get id
+
+# id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | sed -n '1p' )
+
+# id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | sed -n 's/ 1 / 2 /')
+
+id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | grep -o '"id":"(here)","clientId":"ondemand-dev.hpc.osc.edu"')
+
+# '"id":"(here)","clientId":"ondemand-dev.hpc.osc.edu"'
+
+# '[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}'
+
+id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | grep -f - -o '[a-z0-9]{8}-[a-z0-9]{4    }-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}')
+
+
+echo $id > /shared/id
+
 
 # TODO: Get the client secret to use with OnDemand installation
-# Select the “Credentials” tab of the “Client” you are viewing i.e. “Clients >> ondemand-dev.hpc.osc.edu”
-# Copy the value for “secret” for future use in this tutorial (and keep it secure).
+# Select the "Credentials" tab of the "Client" you are viewing i.e. "Clients >> ondemand-dev.hpc.osc.edu"
+# Copy the value for "secret" for future use in this tutorial (and keep it secure).
 
-$keycloak get clients/$client_id/client-secret > /shared/client-secret
+$keycloak get clients/$id/client-secret -r ondemand > /shared/client-secret
 
