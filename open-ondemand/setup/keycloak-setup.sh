@@ -1,7 +1,9 @@
 #! /bin/bash
 
 # Uses the keycloak-cli to setup LDAP and Kerberos authentication through keycloak.
-# Currently needs to be run inside Keycloak container, in directory containing kcadm.sh script.
+
+# Path to keycloak-cli tool:
+$keycloak="/opt/keycloak-4.8.3.Final/bin/kcadm.sh"
 
 # TODO: Make sure volume exists before running this command
 
@@ -16,7 +18,7 @@ server="http://localhost:8080/auth"
 n=0
 until [ "$n" -ge 5 ]
 do
-	/opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server $server --realm $realm --user $user --password $password && break
+	$keycloak config credentials --server $server --realm $realm --user $user --password $password && break
 	n=$((n+1)) 
 	sleep 5
 done
@@ -27,15 +29,31 @@ done
 # ./kcadm.sh create realms -s realm=ondemand -s enabled=true --no-config --server http://localhost:8080/auth --realm   master --user admin --password KEYCLOAKPASS
 
 
-# Create realm
-/opt/keycloak-4.8.3.Final/bin/kcadm.sh create realms -s realm=test -s enabled=true
+# Create ondemand realm
+$keycloak create realms -s realm=ondemand -s enabled=true
+
+# TODO: adjust login parameters in ondemand realm ("remember me: ON", "login with email: OFF")
+
+# TODO: configure LDAP (https://osc.github.io/ood-documentation/latest/authentication/tutorial-oidc-keycloak-rhel7/configure-keycloak-webui.html)
+
+# TODO: Add OnDemand as a client
+# client id: ondemand-dev.hpc.osc.edu
+# client protocol: openid-connect
+# access type: confidential
+# direct access grants enabled: off
+# valid redirect URIs: https://ondemand-dev.hpc.osc.edu/oidc, https://ondemand-dev.hpc.osc.edu # TODO: make sure these are correct
+
+client_id="ondemand-dev.hpc.osc.edu"
+
+$keycloak create client -r ondemand -s clientId=$client_id -s enabled=true -s clientProtocol=openid-connect
 
 
-# TODO: fix login with email and remember me settings
+# TODO: Get client-id
+echo $client_id > /shared/client-id
 
+# TODO: Get the client secret to use with OnDemand installation
+# Select the “Credentials” tab of the “Client” you are viewing i.e. “Clients >> ondemand-dev.hpc.osc.edu”
+# Copy the value for “secret” for future use in this tutorial (and keep it secure).
 
-# Get information about ondemand realm
-# ./kcadm.sh get realms/ondemand --no-config --server http://localhost:8080/auth --realm master --user admin --        password KEYCLOAKPASS
-# Create a new client
-# ./kcadm.sh create clients -r ondemand -s clientId=myapp -s enabled=true --no-config --server http://localhost:8080/  auth --realm master --user admin --password KEYCLOAKPASS
+$keycloak get clients/$client_id/client-secret > /shared/client-secret
 
