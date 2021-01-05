@@ -19,6 +19,12 @@ Otherwise, as long as the volume and application are installed in the same SLATE
 Consult individual cluster documentation for information about supported storage classes. (`slate cluster info <cluster_name>`)
 
 
+## Keycloak Setup:
+
+Default user: `admin`
+Default password: `KEYCLOAKPASS`
+
+
 ## SLATE Setup:
 
 `slate app get-conf open-ondemand > ood.yaml`

@@ -4,14 +4,19 @@
 # Currently needs to be run inside Keycloak container, in directory containing kcadm.sh script.
 
 # TODO: Make sure volume exists before running this command
-# Retrieve keycloak password from volume
-password=`cat /secret-volume/password`
+
+# Setup credentials for connection to API
+user="admin"
+# password=`cat /secret-volume/password`
+password="KEYCLOAKPASS"
+realm="master"
+server="http://localhost:8080/auth"
 
 # Try to setup API access credentials and retry up to five times
 n=0
 until [ "$n" -ge 5 ]
 do
-	/opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password $password && break
+	/opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server $server --realm $realm --user $user --password $password && break
 	n=$((n+1)) 
 	sleep 5
 done
