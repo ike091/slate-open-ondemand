@@ -5,10 +5,9 @@
 # Path to keycloak-cli tool:
 keycloak="/opt/keycloak-4.8.3.Final/bin/kcadm.sh"
 
-# TODO: Make sure volume exists before running this command
-
 # Setup credentials for connection to API
 user="admin"
+# TODO: Make sure volume exists before running this command
 # password=`cat /secret-volume/password`
 password="KEYCLOAKPASS"
 realm="master"
