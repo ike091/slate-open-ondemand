@@ -23,12 +23,6 @@ do
 	sleep 5
 done
 
-# Setup credentials
-# ./kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS
-# Create ondemand realm
-# ./kcadm.sh create realms -s realm=ondemand -s enabled=true --no-config --server http://localhost:8080/auth --realm   master --user admin --password KEYCLOAKPASS
-
-
 # Create ondemand realm
 $keycloak create realms -s realm=ondemand -s enabled=true
 
@@ -43,32 +37,26 @@ $keycloak create realms -s realm=ondemand -s enabled=true
 # direct access grants enabled: off
 # valid redirect URIs: https://ondemand-dev.hpc.osc.edu/oidc, https://ondemand-dev.hpc.osc.edu # TODO: make sure these are correct
 
+# Open OnDemand client id
 client_id="ondemand-dev.hpc.osc.edu"
 
+# Create ondemand client
 $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false
 
+# Store useful regex pattern
+client_id_pattern={\"id\":\"[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\",\"clientId\":\"$client_id\"}
 
-# TODO: Get id
+# Store useful regex pattern
+secret_id_pattern=[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}
 
-# id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | sed -n '1p' )
-
-# id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | sed -n 's/ 1 / 2 /')
-
-id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | grep -o '"id":"(here)","clientId":"ondemand-dev.hpc.osc.edu"')
-
-# '"id":"(here)","clientId":"ondemand-dev.hpc.osc.edu"'
-
-# '[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}'
-
-id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | grep -f - -o '[a-z0-9]{8}-[a-z0-9]{4    }-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}')
-
+# Get other id field and write it to a file
+id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | grep -o -E $client_id_pattern | grep -o -E $secret_id_pattern)
 
 echo $id > /shared/id
 
 
-# TODO: Get the client secret to use with OnDemand installation
-# Select the "Credentials" tab of the "Client" you are viewing i.e. "Clients >> ondemand-dev.hpc.osc.edu"
-# Copy the value for "secret" for future use in this tutorial (and keep it secure).
+# Get the client secret to use with OnDemand installation
+client_secret=$($keycloak get clients/$id/client-secret -r ondemand | tr -d " \t\n\r" | grep -o -E $secret_id_pattern)
 
-$keycloak get clients/$id/client-secret -r ondemand > /shared/client-secret
+echo $client_secret > /shared/client-secret
 
