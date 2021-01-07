@@ -79,7 +79,7 @@ spec:
               mountPath: /secret-volume
               # Mount SLATE volume to the location of the Keycloak database.
             - name: keycloak-db
-              mountPath: "/opt/keycloak-4.8.3.Final/standalone/data"
+              mountPath: "/opt/jboss/keycloak/standalone/data"
           env:
             - name: PROXY_ADDRESS_FORWARDING
               value: "true" 

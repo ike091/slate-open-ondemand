@@ -3,7 +3,7 @@
 # Uses the keycloak-cli to setup LDAP and Kerberos authentication through keycloak.
 
 # Path to keycloak-cli tool:
-keycloak="/opt/keycloak-4.8.3.Final/bin/kcadm.sh"
+keycloak="/opt/jboss/keycloak/bin/kcadm.sh"
 
 # Setup credentials for connection to API
 user="admin"
