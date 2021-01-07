@@ -1,6 +1,16 @@
 #! /bin/bash
 
-# Uses the keycloak-cli to setup LDAP and Kerberos authentication through keycloak.
+# Sets up Keycloak to allow Open OnDemand to authenticate through it.
+
+
+# Path to jboss-cli tool:
+jboss_cli="/opt/jboss/keycloak/bin/jboss-cli.sh"
+
+# Enable proxying to Keycloak:
+$jboss_cli 'embed-server,/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=proxy-address-forwarding,value=true)'
+$jboss_cli 'embed-server,/socket-binding-group=standard-sockets/socket-binding=proxy-https:add(port=443)'
+$jboss_cli 'embed-server,/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=redirect-socket,value=proxy-https)'
+
 
 # Path to keycloak-cli tool:
 keycloak="/opt/jboss/keycloak/bin/kcadm.sh"
