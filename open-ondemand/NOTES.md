@@ -7,6 +7,20 @@
 * Immediate vs. WaitForFirstConsumer SLATE volume bindings?
 
 
+## Notes
+
+If the new image (jboss/keycloak) is used, the `admin` user's password will be set to a random value.
+This password can be found by running `echo $KEYCLOAK_PASSWORD` inside the Keycloak container.
+Because a persistent SLATE volume backs the Keycloak database, if the deployment or container is restarted, `$KEYCLOAK_PASSWORD` will no longer hold the proper admin password.
+The password will still be the same from the first application install.
+
+
+## TO-DO
+
+* Figure out how to determine when Keycloak needs to be set up (identify first time application starts)
+
+
+
 ## Volume Setup
 
 `utah-dev` volume creation: `slate volume create --group slate-dev --cluster utah-dev --size 50M --storageClass local-path keycloak-db`

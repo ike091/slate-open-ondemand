@@ -7,9 +7,7 @@ keycloak="/opt/jboss/keycloak/bin/kcadm.sh"
 
 # Setup credentials for connection to API
 user="admin"
-# TODO: Make sure volume exists before running this command
-# password=`cat /secret-volume/password`
-password="KEYCLOAKPASS"
+password=$KEYCLOAK_PASSWORD
 realm="master"
 server="http://localhost:8080/auth"
 
@@ -37,7 +35,8 @@ $keycloak create realms -s realm=ondemand -s enabled=true
 # valid redirect URIs: https://ondemand-dev.hpc.osc.edu/oidc, https://ondemand-dev.hpc.osc.edu # TODO: make sure these are correct
 
 # Open OnDemand client id
-client_id="ondemand-dev.hpc.osc.edu"
+# client_id="ondemand-dev.hpc.osc.edu"
+client_id="ondemand.utah-dev.slateci.net"
 
 # Create ondemand client
 $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false
