@@ -2,7 +2,7 @@ apiVersion: v1
 data:
   auth_openidc.conf: |
     OIDCProviderMetadataURL https://{{ .Values.Instance }}.keycloak.{{ .Values.SLATE.Cluster.DNSName }}/auth/realms/ondemand/.well-known/openid-configuration
-    OIDCClientID        "account"
+    OIDCClientID        "$(cat /shared/id)"
     OIDCClientSecret    "$(cat /shared/client-secret)"
     OIDCRedirectURI      https://{{ .Values.Instance }}.ondemand.{{ .Values.SLATE.Cluster.DNSName }}/oidc
     OIDCCryptoPassphrase "d14e5b4c8e6257ea81830f23c2be4633ad04d3af9816affdda6d8fec8ea926a000ca47b507587dc5"
