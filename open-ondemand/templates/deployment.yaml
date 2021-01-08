@@ -61,7 +61,7 @@ spec:
             - name: INSTANCE_NAME
               value: {{ include "open-ondemand.fullname" . }}
         - name: keycloak
-          image: dockerbox88/keycloak-ondemand
+          image: jboss/keycloak
           imagePullPolicy: Always
           # Run script if setupKeycloak parameter is enabled.
           {{ if eq .Values.setupKeycloak true }}
@@ -83,6 +83,14 @@ spec:
           env:
             - name: PROXY_ADDRESS_FORWARDING
               value: "true" 
+              # Set Keycloak default username and password
+            - name: KEYCLOAK_USER
+              value: "admin"
+            - name: KEYCLOAK_PASSWORD
+              value: {{ randAlphaNum 12 | b64enc | quote }}
+              # Specify database type (default Java H2 database)
+            - name: DB_VENDOR 
+              value: "h2"
           ports:
             - name: kc8080
               containerPort: 8080
