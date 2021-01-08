@@ -1,36 +1,71 @@
 #! /bin/bash
 
-# Uses the keycloak-cli to setup LDAP and Kerberos authentication through keycloak.
-# Currently needs to be run inside Keycloak container, in directory containing kcadm.sh script.
+# Sets up Keycloak to allow Open OnDemand to authenticate through it.
 
-# TODO: Make sure volume exists before running this command
-# Retrieve keycloak password from volume
-password=`cat /secret-volume/password`
+
+# Path to jboss-cli tool:
+jboss_cli="/opt/jboss/keycloak/bin/jboss-cli.sh"
+
+# Enable proxying to Keycloak:
+$jboss_cli 'embed-server,/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=proxy-address-forwarding,value=true)'
+$jboss_cli 'embed-server,/socket-binding-group=standard-sockets/socket-binding=proxy-https:add(port=443)'
+$jboss_cli 'embed-server,/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=redirect-socket,value=proxy-https)'
+
+
+# Path to keycloak-cli tool:
+keycloak="/opt/jboss/keycloak/bin/kcadm.sh"
+
+# Setup credentials for connection to API
+user="admin"
+password=$KEYCLOAK_PASSWORD
+realm="master"
+server="http://localhost:8080/auth"
 
 # Try to setup API access credentials and retry up to five times
 n=0
 until [ "$n" -ge 5 ]
 do
-	/opt/keycloak-4.8.3.Final/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password $password && break
+	$keycloak config credentials --server $server --realm $realm --user $user --password $password && break
 	n=$((n+1)) 
 	sleep 5
 done
 
-# Setup credentials
-# ./kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password KEYCLOAKPASS
 # Create ondemand realm
-# ./kcadm.sh create realms -s realm=ondemand -s enabled=true --no-config --server http://localhost:8080/auth --realm   master --user admin --password KEYCLOAKPASS
+$keycloak create realms -s realm=ondemand -s enabled=true
+
+# TODO: adjust login parameters in ondemand realm ("remember me: ON", "login with email: OFF")
+
+# TODO: configure LDAP (https://osc.github.io/ood-documentation/latest/authentication/tutorial-oidc-keycloak-rhel7/configure-keycloak-webui.html)
+
+# TODO: Add OnDemand as a client
+# client id: ondemand-dev.hpc.osc.edu
+# client protocol: openid-connect
+# access type: confidential
+# direct access grants enabled: off
+# valid redirect URIs: https://ondemand-dev.hpc.osc.edu/oidc, https://ondemand-dev.hpc.osc.edu # TODO: make sure these are correct
+
+# Open OnDemand client id
+# client_id="ondemand-dev.hpc.osc.edu"
+client_id="ondemand.utah-dev.slateci.net"
+
+# Create ondemand client
+$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false
+
+# Store useful regex pattern
+client_id_pattern={\"id\":\"[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\",\"clientId\":\"$client_id\"}
+
+# Store useful regex pattern
+secret_id_pattern=[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}
+
+# Get other id field
+id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | grep -o -E $client_id_pattern | grep -o -E $secret_id_pattern)
+
+# Write client_id to a file in shared volume
+echo $client_id > /shared/id
 
 
-# Create realm
-/opt/keycloak-4.8.3.Final/bin/kcadm.sh create realms -s realm=test -s enabled=true
+# Get the client secret to use with OnDemand installation
+client_secret=$($keycloak get clients/$id/client-secret -r ondemand | tr -d " \t\n\r" | grep -o -E $secret_id_pattern)
 
-
-# TODO: fix login with email and remember me settings
-
-
-# Get information about ondemand realm
-# ./kcadm.sh get realms/ondemand --no-config --server http://localhost:8080/auth --realm master --user admin --        password KEYCLOAKPASS
-# Create a new client
-# ./kcadm.sh create clients -r ondemand -s clientId=myapp -s enabled=true --no-config --server http://localhost:8080/  auth --realm master --user admin --password KEYCLOAKPASS
+echo $client_secret > /shared/client-secret
 

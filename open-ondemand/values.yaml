@@ -9,7 +9,7 @@ replicaCount: 1
 
 setupKeycloak: false
 
-claimName: pierce-db
+claimName: keycloak-db
 
 SLATE:
   Cluster:
