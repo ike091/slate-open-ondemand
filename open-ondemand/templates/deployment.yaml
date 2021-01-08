@@ -42,7 +42,7 @@ spec:
             claimName: {{ .Values.claimName }}
       containers:
         - name: open-ondemand
-          image: ike091/open-ondemand
+          image: dockerbox88/open-ondemand
           imagePullPolicy: Always
           volumeMounts:
             - name: shared-data
