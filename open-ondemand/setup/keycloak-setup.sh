@@ -57,10 +57,11 @@ client_id_pattern={\"id\":\"[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z
 # Store useful regex pattern
 secret_id_pattern=[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}
 
-# Get other id field and write it to a file
+# Get other id field
 id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | grep -o -E $client_id_pattern | grep -o -E $secret_id_pattern)
 
-echo $id > /shared/id
+# Write client_id to a file in shared volume
+echo $client_id > /shared/id
 
 
 # Get the client secret to use with OnDemand installation
