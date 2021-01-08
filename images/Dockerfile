@@ -7,9 +7,9 @@ RUN yum update -y && \
     yum install -y ondemand ondemand-selinux
 
 # Open ports in firewall
-RUN iptables -I INPUT -p tcp -m tcp --dport 80 -j ACCEPT && \ 
-    iptables -I INPUT -p tcp -m tcp --dport 443 -j ACCEPT && \
-    iptables-save > /etc/sysconfig/iptables
+# RUN iptables -I INPUT -p tcp -m tcp --dport 80 -j ACCEPT && \ 
+    # iptables -I INPUT -p tcp -m tcp --dport 443 -j ACCEPT && \
+    # iptables-save > /etc/sysconfig/iptables
 
 # Start Apache
 CMD systemctl start httpd24-httpd
