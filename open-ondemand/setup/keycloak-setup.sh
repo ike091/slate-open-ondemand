@@ -69,3 +69,25 @@ client_secret=$($keycloak get clients/$id/client-secret -r ondemand | tr -d " \t
 
 echo $client_secret > /shared/client-secret
 
+
+
+
+
+# Things to change:
+
+# Access type: confidential
+# Service accounts: enabled
+# Authorization: enabled
+# Valid redirect URIs (2)
+# * https://global.ondemand.utah-dev.slateci.net
+# * https://global.ondemand.utah-dev.slateci.net/oidc
+
+# TODO: Verify http names are all correct, check json for redirect uri formatting
+$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false -s accessType=confidential -s serviceAccounts=enabled -s authorization=enabled
+
+
+
+# TODO: create environment variable that matches instance name and cluster DNS name
+# TODO: store first password in another environment variable so that it doesn't get overwritten
+
+

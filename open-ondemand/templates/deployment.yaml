@@ -60,6 +60,10 @@ spec:
           env:
             - name: INSTANCE_NAME
               value: {{ include "open-ondemand.fullname" . }}
+            - name: SLATE_CLUSTER_NAME
+              value: {{ .Values.SLATE.Cluster.DNSName }} 
+            - name: SLATE_INSTANCE_NAME
+              value: {{ .Values.Instance }}
         - name: keycloak
           image: jboss/keycloak
           imagePullPolicy: Always
@@ -91,6 +95,10 @@ spec:
               # Specify database type (default Java H2 database)
             - name: DB_VENDOR 
               value: "h2"
+            - name: SLATE_CLUSTER_NAME
+              value: {{ .Values.SLATE.Cluster.DNSName }} 
+            - name: SLATE_INSTANCE_NAME
+              value: {{ .Values.Instance }}
           ports:
             - name: kc8080
               containerPort: 8080
