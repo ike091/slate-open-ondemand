@@ -1,4 +1,7 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "open-ondemand.fullname" . }}-auth-config
 data:
   auth_openidc.sh: |
 printf "    OIDCProviderMetadataURL https://{{ .Values.Instance }}.keycloak.{{ .Values.SLATE.Cluster.DNSName }}/auth/realms/ondemand/.well-known/openid-configuration\n\
@@ -19,6 +22,3 @@ printf "    OIDCProviderMetadataURL https://{{ .Values.Instance }}.keycloak.{{ .
     \n\
     $(echo '# Strip out session cookies before passing to backend')\n\
     OIDCStripCookies mod_auth_openidc_session mod_auth_openidc_session_chunks mod_auth_openidc_session_0 mod_auth_openidc_session_1 " >> 'auth_openidc.conf'
-kind: ConfigMap
-metadata:
-  name: {{ include "open-ondemand.fullname" . }}-auth-config
