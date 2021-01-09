@@ -5,6 +5,8 @@
 ## Questions
 
 * Immediate vs. WaitForFirstConsumer SLATE volume bindings?
+* If a container restarts, what all is preserved?
+	* Are environment variables not declared in the deployment persisted?
 
 
 ## Notes
@@ -13,6 +15,9 @@ If the new image (jboss/keycloak) is used, the `admin` user's password will be s
 This password can be found by running `echo $KEYCLOAK_PASSWORD` inside the Keycloak container.
 Because a persistent SLATE volume backs the Keycloak database, if the deployment or container is restarted, `$KEYCLOAK_PASSWORD` will no longer hold the proper admin password.
 The password will still be the same from the first application install.
+It would be good to figure out how to save this initial password. (SLATE secret?)
+
+
 
 
 ## TO-DO
@@ -28,15 +33,20 @@ The password will still be the same from the first application install.
 This will create the volume in the `slate-group-slate-dev` namespace. 
 For the Keycloak container to properly claim the volume, it will need to be installed in the same group. 
 If installing directly with Helm, use `-n slate-group-slate-dev`. 
-Otherwise, as long as the volume and application are installed in the same SLATE group, everything will work.
+Otherwise, as long as the volume and application are installed in the same SLATE group, the deployment will be able to properly claim its volume.
 
-Consult individual cluster documentation for information about supported storage classes. (`slate cluster info <cluster_name>`)
+Consult individual cluster documentation for information about supported storage classes on a per-cluster basis. (`slate cluster info <cluster_name>`)
 
 
 ## Keycloak Setup:
 
+**Old image:**
 Default user: `admin`
 Default password: `KEYCLOAKPASS`
+
+**New image(jboss/keycloak):**
+Default user: `admin`
+Default password: `echo $KEYCLOAK_PASSWORD` (in Keycloak container)
 
 
 ## SLATE Setup:
