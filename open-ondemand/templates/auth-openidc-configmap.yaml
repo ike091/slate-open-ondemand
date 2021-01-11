@@ -4,7 +4,8 @@ metadata:
   name: {{ include "open-ondemand.fullname" . }}-auth-config
 data:
   auth_openidc.sh: |
-    printf "    OIDCProviderMetadataURL https://{{ .Values.Instance }}.keycloak.{{ .Values.SLATE.Cluster.DNSName }}/auth/realms/ondemand/.well-known/openid-configuration\n\
+    printf "#!/bin/bash
+        OIDCProviderMetadataURL https://{{ .Values.Instance }}.keycloak.{{ .Values.SLATE.Cluster.DNSName }}/auth/realms/ondemand/.well-known/openid-configuration\n\
         OIDCClientID        \"`cat /shared/id`\" \n\
         OIDCClientSecret    \"`cat /shared/client-secret`\"\n\
         OIDCRedirectURI      https://{{ .Values.Instance }}.ondemand.{{ .Values.SLATE.Cluster.DNSName }}/oidc\n\
