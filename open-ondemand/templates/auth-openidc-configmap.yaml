@@ -23,4 +23,4 @@ data:
         OIDCPassClaimsAs environment\n\
         \n\
         $(echo '# Strip out session cookies before passing to backend')\n\
-        OIDCStripCookies mod_auth_openidc_session mod_auth_openidc_session_chunks mod_auth_openidc_session_0 mod_auth_openidc_session_1 " >> '/opt/rh/httpd24/root/etc/httpd/conf.d/auth_openidc.conf'
+        OIDCStripCookies mod_auth_openidc_session mod_auth_openidc_session_chunks mod_auth_openidc_session_0 mod_auth_openidc_session_1 " > '/opt/rh/httpd24/root/etc/httpd/conf.d/auth_openidc.conf'
