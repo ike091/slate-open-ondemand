@@ -21,8 +21,8 @@ spec:
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-auth-config
             items:
-            - key: auth_openidc.conf
-              path: auth_openidc.conf
+            - key: auth_openidc.sh
+              path: auth_openidc.sh
             defaultMode: 0700
         - name: ood-portal-config
           configMap:
