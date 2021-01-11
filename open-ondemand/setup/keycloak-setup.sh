@@ -76,14 +76,13 @@ echo $client_secret > /shared/client-secret
 # Things to change:
 
 # Access type: confidential
-# Service accounts: enabled
 # Authorization: enabled
 # Valid redirect URIs (2)
 # * https://global.ondemand.utah-dev.slateci.net
 # * https://global.ondemand.utah-dev.slateci.net/oidc
 
 # TODO: Verify http names are all correct, check json for redirect uri formatting
-$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false -s accessType=confidential -s serviceAccounts=enabled -s authorization=enabled
+# $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false -s serviceAccountsEnabled=true
 
 
 
