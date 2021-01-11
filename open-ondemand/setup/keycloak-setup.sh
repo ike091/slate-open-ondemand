@@ -46,10 +46,12 @@ $keycloak create realms -s realm=ondemand -s enabled=true
 
 # Open OnDemand client id
 # client_id="ondemand-dev.hpc.osc.edu"
-client_id="ondemand.utah-dev.slateci.net"
+client_id=$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME
 
 # Create ondemand client
-$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false
+# $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false
+redirect_uris=["https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME", "https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME/oidc"]
+$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false -s serviceAccountsEnabled=true -s redirectUris=$redirect_uris
 
 # Store useful regex pattern
 client_id_pattern={\"id\":\"[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\",\"clientId\":\"$client_id\"}
@@ -71,8 +73,6 @@ echo $client_secret > /shared/client-secret
 
 
 
-
-
 # Things to change:
 
 # Access type: confidential
@@ -81,8 +81,10 @@ echo $client_secret > /shared/client-secret
 # * https://global.ondemand.utah-dev.slateci.net
 # * https://global.ondemand.utah-dev.slateci.net/oidc
 
+
 # TODO: Verify http names are all correct, check json for redirect uri formatting
-# $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false -s serviceAccountsEnabled=true
+# redirect_uris=["https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME", "https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME/oidc"]
+# $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false -s serviceAccountsEnabled=true -s redirectUris=$redirect_uris
 
 
 
