@@ -45,6 +45,10 @@ spec:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
           imagePullPolicy: Always
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "/opt/rh/httpd24/root/etc/httpd/conf.d/auth_openidc.sh"]
           volumeMounts:
             - name: shared-data
               mountPath: /shared
