@@ -24,7 +24,7 @@ It would be good to figure out how to save this initial password. (SLATE secret?
 
 * Figure out how to determine when Keycloak needs to be set up (identify first time application starts)
 * Add fail-safe if script is inadvertently run twice? Check for prior existence of on-demand realm?
-* Verify naming error with Pierce's script. (Changing .conf to .sh seemed to work)
+	* This is particularly important because Kubernetes may attempt to run post-start hooks twice.
 
 
 

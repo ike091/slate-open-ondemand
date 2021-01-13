@@ -50,6 +50,11 @@ client_id=$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME
 
 # Create ondemand client
 # $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false
+
+# Authorization: enabled
+# accesstype = confidential
+# Try setting publicClient=false
+
 redirect_uris="[\"https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME\",\"https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME/oidc\"]"
 $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false -s serviceAccountsEnabled=true -s redirectUris=$redirect_uris
 
