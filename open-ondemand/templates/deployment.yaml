@@ -47,7 +47,7 @@ spec:
               protocol: TCP
           env:
             - name: INSTANCE_NAME
-              value: {{ include "open-ondemand.fullname" . }}
+              value: {{ .Values.Instance }}
             - name: CLUSTER_DNS
               value: {{ .Values.SLATE.Cluster.DNSName }}
         - name: keycloak
