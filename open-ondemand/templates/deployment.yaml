@@ -65,6 +65,8 @@ spec:
           env:
             - name: INSTANCE_NAME
               value: {{ include "open-ondemand.fullname" . }}
+            - name: CLUSTER_DNS
+              value: {{ .Values.SLATE.Cluster.DNSName }}
         - name: keycloak
           image: jboss/keycloak
           imagePullPolicy: Always
