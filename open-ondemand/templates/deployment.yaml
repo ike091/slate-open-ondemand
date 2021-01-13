@@ -17,13 +17,6 @@ spec:
       volumes:
         - name: shared-data
           emptyDir: {}
-        - name: auth-config
-          configMap:
-            name: {{ include "open-ondemand.fullname" . }}-auth-config
-            items:
-            - key: auth_openidc.sh
-              path: auth_openidc.sh
-            defaultMode: 0700
         - name: ood-portal-config
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-ood-portal
@@ -34,9 +27,6 @@ spec:
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-keycloak-setup
             defaultMode: 0744 
-        - name: secret-volume
-          secret:
-            secretName: {{ include "open-ondemand.fullname" . }}-keycloak-password
         # Claim SLATE volume to persist Keycloak data.
         - name: keycloak-db
           persistentVolumeClaim:
@@ -45,16 +35,9 @@ spec:
         - name: open-ondemand
           image: dockerbox88/open-ondemand
           imagePullPolicy: Always
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/bash", "/opt/rh/httpd24/root/etc/httpd/conf.d/auth_openidc.sh"]
           volumeMounts:
             - name: shared-data
               mountPath: /shared
-            - name: auth-config
-              mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d/auth_openidc.sh
-              subPath: auth_openidc.sh
             - name: ood-portal-config
               mountPath: /etc/ood/config/ood_portal.yml
               subPath: ood_portal.yml
@@ -82,8 +65,6 @@ spec:
               mountPath: /shared
             - name: keycloak-setup
               mountPath: /etc/keycloak/
-            - name: secret-volume
-              mountPath: /secret-volume
               # Mount SLATE volume to the location of the Keycloak database.
             - name: keycloak-db
               mountPath: "/opt/jboss/keycloak/standalone/data"
