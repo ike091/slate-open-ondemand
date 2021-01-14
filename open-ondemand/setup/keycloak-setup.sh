@@ -30,33 +30,20 @@ do
 	sleep 5
 done
 
-# Create ondemand realm
+# Create Open-OnDemand realm
 $keycloak create realms -s realm=ondemand -s enabled=true
 
 # TODO: adjust login parameters in ondemand realm ("remember me: ON", "login with email: OFF")
 
 # TODO: configure LDAP (https://osc.github.io/ood-documentation/latest/authentication/tutorial-oidc-keycloak-rhel7/configure-keycloak-webui.html)
 
-# TODO: Add OnDemand as a client
-# client id: ondemand-dev.hpc.osc.edu
-# client protocol: openid-connect
-# access type: confidential
-# direct access grants enabled: off
-# valid redirect URIs: https://ondemand-dev.hpc.osc.edu/oidc, https://ondemand-dev.hpc.osc.edu # TODO: make sure these are correct
-
 # Open OnDemand client id
-# client_id="ondemand-dev.hpc.osc.edu"
 client_id=$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME
 
-# Create ondemand client
-# $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false
-
-# Authorization: enabled
-# accesstype = confidential
-# Try setting publicClient=false
-
 redirect_uris="[\"https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME\",\"https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME/oidc\"]"
-$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false -s serviceAccountsEnabled=true -s redirectUris=$redirect_uris
+
+# Create Open-OnDemand Keycloak client
+$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s publicClient=false -s protocol=openid-connect -s directAccessGrantsEnabled=false -s serviceAccountsEnabled=true -s redirectUris=$redirect_uris -s authorizationServicesEnabled=true
 
 # Store useful regex pattern
 client_id_pattern={\"id\":\"[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\",\"clientId\":\"$client_id\"}
@@ -70,30 +57,8 @@ id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | 
 # Write client_id to a file in shared volume
 echo $client_id > /shared/id
 
-
 # Get the client secret to use with OnDemand installation
 client_secret=$($keycloak get clients/$id/client-secret -r ondemand | tr -d " \t\n\r" | grep -o -E $secret_id_pattern)
 
 echo $client_secret > /shared/client-secret
-
-
-
-# Things to change:
-
-# Access type: confidential
-# Authorization: enabled
-# Valid redirect URIs (2)
-# * https://global.ondemand.utah-dev.slateci.net
-# * https://global.ondemand.utah-dev.slateci.net/oidc
-
-
-# TODO: Verify http names are all correct, check json for redirect uri formatting
-# redirect_uris=["https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME", "https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME/oidc"]
-# $keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false -s serviceAccountsEnabled=true -s redirectUris=$redirect_uris
-
-
-
-# TODO: create environment variable that matches instance name and cluster DNS name
-# TODO: store first password in another environment variable so that it doesn't get overwritten
-
 
