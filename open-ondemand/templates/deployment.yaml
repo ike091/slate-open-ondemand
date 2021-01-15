@@ -51,7 +51,7 @@ spec:
             - name: CLUSTER_DNS
               value: {{ .Values.SLATE.Cluster.DNSName }}
         - name: keycloak
-          image: jboss/keycloak
+          image: jboss/keycloak:4.8.3.Final
           imagePullPolicy: Always
           # Run script if setupKeycloak parameter is enabled.
           {{ if eq .Values.setupKeycloak true }}
