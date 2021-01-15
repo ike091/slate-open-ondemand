@@ -17,12 +17,6 @@ spec:
       volumes:
         - name: shared-data
           emptyDir: {}
-        - name: auth-config
-          configMap:
-            name: {{ include "open-ondemand.fullname" . }}-auth-config
-            items:
-            - key: auth_openidc.conf
-              path: auth_openidc.conf
         - name: ood-portal-config
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-ood-portal
@@ -32,10 +26,10 @@ spec:
         - name: keycloak-setup
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-keycloak-setup
+        - name: cluster-setup
+          configMap:
+            name: {{ include "open-ondemand.fullname" . }}-cluster-setup
             defaultMode: 0744 
-        - name: secret-volume
-          secret:
-            secretName: {{ include "open-ondemand.fullname" . }}-keycloak-password
         # Claim SLATE volume to persist Keycloak data.
         - name: keycloak-db
           persistentVolumeClaim:
@@ -47,21 +41,22 @@ spec:
           volumeMounts:
             - name: shared-data
               mountPath: /shared
-            - name: auth-config
-              mountPath: /opt/rh/httpd24/root/etc/httpd/conf.d/auth_openidc.conf
-              subPath: auth_openidc.conf
             - name: ood-portal-config
               mountPath: /etc/ood/config/ood_portal.yml
               subPath: ood_portal.yml
+            - name: cluster-setup
+              mountPath: /etc/ood/config/clusters.d/
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
           env:
             - name: INSTANCE_NAME
-              value: {{ include "open-ondemand.fullname" . }}
+              value: {{ .Values.Instance }}
+            - name: CLUSTER_DNS
+              value: {{ .Values.SLATE.Cluster.DNSName }}
         - name: keycloak
-          image: jboss/keycloak
+          image: jboss/keycloak:4.8.3.Final
           imagePullPolicy: Always
           # Run script if setupKeycloak parameter is enabled.
           {{ if eq .Values.setupKeycloak true }}
@@ -75,11 +70,9 @@ spec:
               mountPath: /shared
             - name: keycloak-setup
               mountPath: /etc/keycloak/
-            - name: secret-volume
-              mountPath: /secret-volume
               # Mount SLATE volume to the location of the Keycloak database.
             - name: keycloak-db
-              mountPath: "/opt/keycloak-4.8.3.Final/standalone/data"
+              mountPath: "/opt/jboss/keycloak/standalone/data"
           env:
             - name: PROXY_ADDRESS_FORWARDING
               value: "true" 
