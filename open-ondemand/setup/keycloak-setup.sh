@@ -61,4 +61,3 @@ echo $client_id > /shared/id
 client_secret=$($keycloak get clients/$id/client-secret -r ondemand | tr -d " \t\n\r" | grep -o -E $secret_id_pattern)
 
 echo $client_secret > /shared/client-secret
-

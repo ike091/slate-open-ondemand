@@ -26,6 +26,9 @@ spec:
         - name: keycloak-setup
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-keycloak-setup
+        - name: cluster-setup
+          configMap:
+            name: {{ include "open-ondemand.fullname" . }}-cluster-setup
             defaultMode: 0744 
         # Claim SLATE volume to persist Keycloak data.
         - name: keycloak-db
@@ -41,6 +44,8 @@ spec:
             - name: ood-portal-config
               mountPath: /etc/ood/config/ood_portal.yml
               subPath: ood_portal.yml
+            - name: cluster-setup
+              mountPath: /etc/ood/config/clusters.d/
           ports:
             - name: http
               containerPort: 80
@@ -55,7 +60,7 @@ spec:
             - name: CLUSTER_DNS
               value: {{ .Values.SLATE.Cluster.DNSName }}
         - name: keycloak
-          image: jboss/keycloak
+          image: jboss/keycloak:4.8.3.Final
           imagePullPolicy: Always
           # Run script if setupKeycloak parameter is enabled.
           {{ if eq .Values.setupKeycloak true }}

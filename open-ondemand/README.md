@@ -34,3 +34,85 @@ The following table lists the configurable parameters of the Open OnDemand appli
 |`setupKeycloak`| Runs Keycloak setup script if enabled. |`true`|
 |`claimName`| The name of the SLATE volume to store configuration in. |`keycloak-db`| 
 |`SLATE.Cluster.DNSName`| DNS name of the cluster the application is deployed on. |`utah-dev.slateci.net`|
+
+
+## Configure Shell Application
+
+To configure nodes for remote shell access, yaml files must be placed in the
+`/etc/ood/config/clusters.d/` directory.
+When configured correctly, any node where a user has SSH permissions can be
+accessed through the Open OnDemand web portal.
+
+---
+v2:
+  metadata:
+    title: "mycluster"
+    priority: 2
+  login:
+    host: "mycluster.example1.com"
+  job:
+    adapter: "slurm"
+    cluster: "mycluster"
+    bin: "/mycluster/sys/pkg/slurm/std/bin"
+  custom:
+    xdmod:
+      resource_id: 14
+    queues:
+      - "mycluster"
+      - "mycluster-guest"
+      - "mycluster-freecycle"
+  batch_connect:
+    basic:
+      script_wrapper: |
+        #!/bin/bash
+        echo "Hello, World!"
+      set_host: "host=$(hostname -s).example1.com"
+    vnc:
+      script_wrapper: |
+        #!/bin/bash
+        export var="myvar"
+      set_host: "host=$(hostname -s).example1.com"
+---
+v2:
+  metadata:
+    title: "node1"
+    url: "https://www.chpc.utah.edu/documentation/guides/frisco-nodes.php"
+    hidden: false
+  login:
+    host: "node1.example2.com"
+  job:
+    adapter: "linux_host"
+    submit_host: "node1.example2.com"  # This is the head for a login round robin
+    ssh_hosts: # These are the actual login nodes, need to have full host name for the regex to work
+      - node1.example2.com
+    site_timeout: 7200
+    debug: true
+    singularity_bin: /uufs/chpc.utah.edu/sys/installdir/singularity3/std/bin/singularity
+    singularity_bindpath: /etc,/mnt,/media,/opt,/run,/srv,/usr,/var,/uufs,/scratch
+#    singularity_image: /opt/ood/linuxhost_adapter/centos7_lmod.sif
+    singularity_image: /uufs/chpc.utah.edu/sys/installdir/ood/centos7_lmod.sif
+    # Enabling strict host checking may cause the adapter to fail if the user's known_hosts does not have all the roundrobin hosts
+    strict_host_checking: false
+    tmux_bin: /usr/bin/tmux
+---
+v2:
+  metadata:
+    title: "node2"
+    url: "https://www.chpc.utah.edu/documentation/guides/frisco-nodes.php"
+    hidden: false
+  login:
+    host: "node2.example2.com"
+  job:
+    adapter: "linux_host"
+    submit_host: "node2.example2.com"  # This is the head for a login round robin
+    ssh_hosts: # These are the actual login nodes, need to have full host name for the regex to work
+      - node2.example2.com
+    site_timeout: 7200
+    debug: true
+    singularity_bin: /uufs/chpc.utah.edu/sys/installdir/singularity3/std/bin/singularity
+    singularity_bindpath: /etc,/mnt,/media,/opt,/run,/srv,/usr,/var,/uufs,/scratch
+#    singularity_image: /opt/ood/linuxhost_adapter/centos7_lmod.sif
+    singularity_image: /uufs/chpc.utah.edu/sys/installdir/ood/centos7_lmod.sif
+    # Enabling strict host checking may cause the adapter to fail if the user's known_hosts does not have all the roundrobin hosts
+    strict_host_checking: false
+    tmux_bin: /usr/bin/tmux
