@@ -35,11 +35,11 @@ $keycloak create realms -s realm=ondemand -s enabled=true
 
 # TODO: adjust login parameters in ondemand realm ("remember me: ON", "login with email: OFF")
 
-# TODO: configure LDAP (https://osc.github.io/ood-documentation/latest/authentication/tutorial-oidc-keycloak-rhel7/configure-keycloak-webui.html)
 
 # Open OnDemand client id
 client_id=$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME
 
+# OnDemand URIs to redirect to Keycloak
 redirect_uris="[\"https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME\",\"https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME/oidc\"]"
 
 # Create Open-OnDemand Keycloak client
@@ -60,4 +60,14 @@ echo $client_id > /shared/id
 # Get the client secret to use with OnDemand installation
 client_secret=$($keycloak get clients/$id/client-secret -r ondemand | tr -d " \t\n\r" | grep -o -E $secret_id_pattern)
 
+# Write client_secret to a file in shared volume
 echo $client_secret > /shared/client-secret
+
+
+
+# TODO: configure LDAP (https://osc.github.io/ood-documentation/latest/authentication/tutorial-oidc-keycloak-rhel7/configure-keycloak-webui.html)
+
+$keycloak create components -r ondemand -s name=kerberos-ldap-provider -s providerId=ldap -s providerType=org.keycloak.storage.UserStorageProvider -s parentId=3d9c572b-8f33-483f-98a6-8bb421667867  -s 'config.priority=["1"]' -s 'config.fullSyncPeriod=["-1"]' -s 'config.changedSyncPeriod=["-1"]' -s 'config.cachePolicy=["DEFAULT"]' -s config.evictionDay=[] -s config.evictionHour=[] -s config.evictionMinute=[] -s config.maxLifespan=[] -s 'config.batchSizeForSync=["1000"]' -s 'config.editMode=["WRITABLE"]' -s 'config.syncRegistrations=["false"]' -s 'config.vendor=["other"]' -s 'config.usernameLDAPAttribute=["uid"]' -s 'config.rdnLDAPAttribute=["uid"]' -s 'config.uuidLDAPAttribute=["entryUUID"]' -s 'config.userObjectClasses=["inetOrgPerson, organizationalPerson"]' -s 'config.connectionUrl=["ldap://localhost:10389"]'  -s 'config.usersDn=["ou=People,dc=keycloak,dc=org"]' -s 'config.authType=["simple"]' -s 'config.bindDn=["uid=admin,ou=system"]' -s 'config.bindCredential=["secret"]' -s 'config.searchScope=["1"]' -s 'config.useTruststoreSpi=["ldapsOnly"]' -s 'config.connectionPooling=["true"]' -s 'config.pagination=["true"]' -s 'config.allowKerberosAuthentication=["true"]' -s 'config.serverPrincipal=["HTTP/localhost@KEYCLOAK.ORG"]' -s 'config.keyTab=["http.keytab"]' -s 'config.kerberosRealm=["KEYCLOAK.ORG"]' -s 'config.debug=["true"]' -s 'config.useKerberosForPasswordAuthentication=["true"]'
+
+
+
