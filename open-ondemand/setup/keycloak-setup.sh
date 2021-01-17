@@ -2,6 +2,9 @@
 
 # Sets up Keycloak to allow Open OnDemand to authenticate through it.
 
+# TODO: ensure that this script can safely be run twice
+# TODO: save Keycloak admin password in a SLATE secret somehow?
+
 
 # Path to jboss-cli tool:
 jboss_cli="/opt/jboss/keycloak/bin/jboss-cli.sh"
