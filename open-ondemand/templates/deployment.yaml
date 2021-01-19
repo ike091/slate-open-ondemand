@@ -51,9 +51,9 @@ spec:
               containerPort: 80
               protocol: TCP
           env:
-            - name: INSTANCE_NAME
+            - name: SLATE_INSTANCE_NAME
               value: {{ .Values.Instance }}
-            - name: CLUSTER_DNS
+            - name: SLATE_CLUSTER_DNS
               value: {{ .Values.SLATE.Cluster.DNSName }}
         - name: keycloak
           image: jboss/keycloak:4.8.3.Final
@@ -84,9 +84,9 @@ spec:
               # Specify database type (default Java H2 database)
             - name: DB_VENDOR 
               value: "h2"
-            - name: INSTANCE_NAME
+            - name: SLATE_INSTANCE_NAME
               value: {{ .Values.Instance }}
-            - name: CLUSTER_DNS
+            - name: SLATE_CLUSTER_DNS
               value: {{ .Values.SLATE.Cluster.DNSName }}
           ports:
             - name: kc8080
