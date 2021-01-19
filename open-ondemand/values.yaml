@@ -7,7 +7,7 @@ Instance: "global"
 
 replicaCount: 1
 
-setupKeycloak: false
+setupKeycloak: true
 
 claimName: keycloak-db
 
