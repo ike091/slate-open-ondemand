@@ -1,15 +1,23 @@
 #! /bin/bash
 
-# Uses the keycloak-cli to setup LDAP and Kerberos authentication through keycloak.
+# Sets up Keycloak to allow Open OnDemand to authenticate through it.
+
+
+# Path to jboss-cli tool:
+jboss_cli="/opt/jboss/keycloak/bin/jboss-cli.sh"
+
+# Enable proxying to Keycloak:
+$jboss_cli 'embed-server,/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=proxy-address-forwarding,value=true)'
+$jboss_cli 'embed-server,/socket-binding-group=standard-sockets/socket-binding=proxy-https:add(port=443)'
+$jboss_cli 'embed-server,/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=redirect-socket,value=proxy-https)'
+
 
 # Path to keycloak-cli tool:
-keycloak="/opt/keycloak-4.8.3.Final/bin/kcadm.sh"
+keycloak="/opt/jboss/keycloak/bin/kcadm.sh"
 
 # Setup credentials for connection to API
 user="admin"
-# TODO: Make sure volume exists before running this command
-# password=`cat /secret-volume/password`
-password="KEYCLOAKPASS"
+password=$KEYCLOAK_PASSWORD
 realm="master"
 server="http://localhost:8080/auth"
 
@@ -22,25 +30,20 @@ do
 	sleep 5
 done
 
-# Create ondemand realm
+# Create Open-OnDemand realm
 $keycloak create realms -s realm=ondemand -s enabled=true
 
 # TODO: adjust login parameters in ondemand realm ("remember me: ON", "login with email: OFF")
 
 # TODO: configure LDAP (https://osc.github.io/ood-documentation/latest/authentication/tutorial-oidc-keycloak-rhel7/configure-keycloak-webui.html)
 
-# TODO: Add OnDemand as a client
-# client id: ondemand-dev.hpc.osc.edu
-# client protocol: openid-connect
-# access type: confidential
-# direct access grants enabled: off
-# valid redirect URIs: https://ondemand-dev.hpc.osc.edu/oidc, https://ondemand-dev.hpc.osc.edu # TODO: make sure these are correct
-
 # Open OnDemand client id
-client_id="ondemand-dev.hpc.osc.edu"
+client_id=$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME
 
-# Create ondemand client
-$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s protocol=openid-connect -s directAccessGrantsEnabled=false
+redirect_uris="[\"https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME\",\"https://$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME/oidc\"]"
+
+# Create Open-OnDemand Keycloak client
+$keycloak create clients -r ondemand -s clientId=$client_id -s enabled=true -s publicClient=false -s protocol=openid-connect -s directAccessGrantsEnabled=false -s serviceAccountsEnabled=true -s redirectUris=$redirect_uris -s authorizationServicesEnabled=true
 
 # Store useful regex pattern
 client_id_pattern={\"id\":\"[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\",\"clientId\":\"$client_id\"}
@@ -48,11 +51,11 @@ client_id_pattern={\"id\":\"[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z
 # Store useful regex pattern
 secret_id_pattern=[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}
 
-# Get other id field and write it to a file
+# Get other id field
 id=$($keycloak get clients -r ondemand --fields clientId,id | tr -d " \t\n\r" | grep -o -E $client_id_pattern | grep -o -E $secret_id_pattern)
 
-echo $id > /shared/id
-
+# Write client_id to a file in shared volume
+echo $client_id > /shared/id
 
 # Get the client secret to use with OnDemand installation
 client_secret=$($keycloak get clients/$id/client-secret -r ondemand | tr -d " \t\n\r" | grep -o -E $secret_id_pattern)
