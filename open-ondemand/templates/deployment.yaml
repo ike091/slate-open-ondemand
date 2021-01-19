@@ -84,6 +84,10 @@ spec:
               # Specify database type (default Java H2 database)
             - name: DB_VENDOR 
               value: "h2"
+            - name: INSTANCE_NAME
+              value: {{ .Values.Instance }}
+            - name: CLUSTER_DNS
+              value: {{ .Values.SLATE.Cluster.DNSName }}
           ports:
             - name: kc8080
               containerPort: 8080
