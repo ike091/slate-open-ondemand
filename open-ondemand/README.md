@@ -43,36 +43,6 @@ To configure nodes for remote shell access, yaml files must be placed in the
 When configured correctly, any node where a user has SSH permissions can be
 accessed through the Open OnDemand web portal.
 
----
-v2:
-  metadata:
-    title: "mycluster"
-    priority: 2
-  login:
-    host: "mycluster.example1.com"
-  job:
-    adapter: "slurm"
-    cluster: "mycluster"
-    bin: "/mycluster/sys/pkg/slurm/std/bin"
-  custom:
-    xdmod:
-      resource_id: 14
-    queues:
-      - "mycluster"
-      - "mycluster-guest"
-      - "mycluster-freecycle"
-  batch_connect:
-    basic:
-      script_wrapper: |
-        #!/bin/bash
-        echo "Hello, World!"
-      set_host: "host=$(hostname -s).example1.com"
-    vnc:
-      script_wrapper: |
-        #!/bin/bash
-        export var="myvar"
-      set_host: "host=$(hostname -s).example1.com"
----
 v2:
   metadata:
     title: "node1"
@@ -87,11 +57,4 @@ v2:
       - node1.example1.com
     site_timeout: 7200
     debug: true
-    singularity_bin: /uufs/chpc.utah.edu/sys/installdir/singularity3/std/bin/singularity
-    singularity_bindpath: /etc,/mnt,/media,/opt,/run,/srv,/usr,/var,/uufs,/scratch
-#    singularity_image: /opt/ood/linuxhost_adapter/centos7_lmod.sif
-    singularity_image: /uufs/chpc.utah.edu/sys/installdir/ood/centos7_lmod.sif
-    # Enabling strict host checking may cause the adapter to fail if the user's known_hosts does not have all the roundrobin hosts
-    strict_host_checking: false
-    tmux_bin: /usr/bin/tmux
 ---
