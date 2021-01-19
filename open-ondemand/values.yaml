@@ -14,3 +14,5 @@ claimName: keycloak-db
 SLATE:
   Cluster:
     DNSName: "utah-dev.slateci.net"
+
+setupUtahLDAP: true
