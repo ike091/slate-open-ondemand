@@ -79,12 +79,12 @@ v2:
     url: "https://www.chpc.utah.edu/documentation/guides/frisco-nodes.php"
     hidden: false
   login:
-    host: "node1.example2.com"
+    host: "node1.example1.com"
   job:
     adapter: "linux_host"
-    submit_host: "node1.example2.com"  # This is the head for a login round robin
+    submit_host: "node1.example1.com"  # This is the head for a login round robin
     ssh_hosts: # These are the actual login nodes, need to have full host name for the regex to work
-      - node1.example2.com
+      - node1.example1.com
     site_timeout: 7200
     debug: true
     singularity_bin: /uufs/chpc.utah.edu/sys/installdir/singularity3/std/bin/singularity
@@ -95,24 +95,3 @@ v2:
     strict_host_checking: false
     tmux_bin: /usr/bin/tmux
 ---
-v2:
-  metadata:
-    title: "node2"
-    url: "https://www.chpc.utah.edu/documentation/guides/frisco-nodes.php"
-    hidden: false
-  login:
-    host: "node2.example2.com"
-  job:
-    adapter: "linux_host"
-    submit_host: "node2.example2.com"  # This is the head for a login round robin
-    ssh_hosts: # These are the actual login nodes, need to have full host name for the regex to work
-      - node2.example2.com
-    site_timeout: 7200
-    debug: true
-    singularity_bin: /uufs/chpc.utah.edu/sys/installdir/singularity3/std/bin/singularity
-    singularity_bindpath: /etc,/mnt,/media,/opt,/run,/srv,/usr,/var,/uufs,/scratch
-#    singularity_image: /opt/ood/linuxhost_adapter/centos7_lmod.sif
-    singularity_image: /uufs/chpc.utah.edu/sys/installdir/ood/centos7_lmod.sif
-    # Enabling strict host checking may cause the adapter to fail if the user's known_hosts does not have all the roundrobin hosts
-    strict_host_checking: false
-    tmux_bin: /usr/bin/tmux
