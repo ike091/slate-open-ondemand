@@ -16,3 +16,6 @@ SLATE:
     DNSName: "utah-dev.slateci.net"
 
 setupUtahLDAP: true
+
+ldap:
+  kerberosRealm: "AD.UTAH.EDU"
