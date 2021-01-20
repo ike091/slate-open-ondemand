@@ -88,8 +88,8 @@ spec:
               value: {{ .Values.Instance }}
             - name: SLATE_CLUSTER_NAME
               value: {{ .Values.SLATE.Cluster.DNSName }}
-            - name: SLATE_SETUP_UTAH_LDAP
-              value: {{ .Values.setupUtahLDAP }}
+            - name: SLATE_SETUP_LDAP
+              value: {{ .Values.setupLDAP | quote }}
           ports:
             - name: kc8080
               containerPort: 8080

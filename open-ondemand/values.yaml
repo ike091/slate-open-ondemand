@@ -15,7 +15,22 @@ SLATE:
   Cluster:
     DNSName: "utah-dev.slateci.net"
 
-setupUtahLDAP: true
-
+setupLDAP: true
 ldap:
-  kerberosRealm: "AD.UTAH.EDU"
+  importUsers: "true"
+  rdnLDAPAttribute:  "uid"
+  uuidLDAPAttribute: "uidNumber"
+  userObjectClasses: "inetOrgPerson, organizationalPerson"
+  connectionURL: "ldap://ldap.chpc.utah.edu"
+  usersDN: "ou=People,dc=chpc,dc=utah,dc=edu"
+kerberos:
+  realm: "AD.UTAH.EDU"
+  serverPrincipal: "HTTP/utah-dev.chpc.utah.edu@AD.UTAH.EDU"
+  keyTab: "/etc/krb5.keytab"
+  debug: "true"
+  kerberosPasswordAuth: "true"
+
+
+
+
+
