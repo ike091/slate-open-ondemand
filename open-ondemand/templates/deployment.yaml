@@ -20,16 +20,13 @@ spec:
         - name: ood-portal-config
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-ood-portal
-            items:
-            - key: ood_portal.yml
-              path: ood_portal.yml
         - name: keycloak-setup
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-keycloak-setup
         - name: cluster-setup
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-cluster-setup
-            defaultMode: 0744 
+            defaultMode: 0700
         # Claim SLATE volume to persist Keycloak data.
         - name: keycloak-db
           persistentVolumeClaim:
