@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 data:
-  ood-portal.yml:
+  ood-portal.yml: |
     # /etc/ood/config/ood_portal.yml
     ---
         # List of Apache authentication directives
