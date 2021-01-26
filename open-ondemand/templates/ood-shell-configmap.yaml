@@ -13,12 +13,5 @@ data:
         adapter: "slurm"
         cluster: "kingspeak"
         bin: "/uufs/kingspeak.peaks/sys/pkg/slurm/std/bin"
-      custom:
-        xdmod:
-          resource_id: 16
-        queues:
-          - "kingspeak"
-          - "kingspeak-guest"
-          - "kingspeak-freecycle"
 metadata:
   name: {{ include "open-ondemand.fullname" . }}-shell-setup
