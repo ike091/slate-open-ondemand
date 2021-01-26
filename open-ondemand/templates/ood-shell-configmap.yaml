@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  clusters.yaml: |
+    ---
+    v2:
+      metadata:
+        title: "Kingspeak"
+        priority: 2
+      login:
+        host: "kingspeak.chpc.utah.edu"
+      job:
+        adapter: "slurm"
+        cluster: "kingspeak"
+        bin: "/uufs/kingspeak.peaks/sys/pkg/slurm/std/bin"
+      custom:
+        xdmod:
+          resource_id: 16
+        queues:
+          - "kingspeak"
+          - "kingspeak-guest"
+          - "kingspeak-freecycle"
+    ---
+metadata:
+  name: {{ include "open-ondemand.fullname" . }}-shell-setup
