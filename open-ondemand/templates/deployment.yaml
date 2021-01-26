@@ -47,7 +47,7 @@ spec:
               mountPath: /etc/ood/config/ood_portal.yml
               subPath: ood_portal.yml
             - name: shell-app-setup
-              mountPath: /etc/ood/config/clusters.d/
+              mountPath: /etc/ood/config/clusters.d/clusters.yaml
               subPath: clusters.yaml
           ports:
             - name: http
