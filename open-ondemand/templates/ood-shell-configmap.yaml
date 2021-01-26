@@ -39,6 +39,6 @@ data:
             export XDG_RUNTIME_DIR=$(mktemp -d)
             %s
           set_host: "host=$(hostname -A | awk '{print $2}')"
-      ---
+    ---
 metadata:
   name: {{ include "open-ondemand.fullname" . }}-shell-setup
