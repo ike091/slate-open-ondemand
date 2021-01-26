@@ -9,9 +9,5 @@ data:
         priority: 2
       login:
         host: "kingspeak.chpc.utah.edu"
-      job:
-        adapter: "slurm"
-        cluster: "kingspeak"
-        bin: "/uufs/kingspeak.peaks/sys/pkg/slurm/std/bin"
 metadata:
   name: {{ include "open-ondemand.fullname" . }}-shell-setup
