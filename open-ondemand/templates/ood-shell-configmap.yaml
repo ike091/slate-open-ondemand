@@ -5,9 +5,9 @@ data:
     ---
     v2:
       metadata:
-        title: "Kingspeak"
+        title: "{{ .Values.cluster1.name }}"
         priority: 2
       login:
-        host: "kingspeak.chpc.utah.edu"
+        host: "{{ .Values.cluster1.host }}"
 metadata:
   name: {{ include "open-ondemand.fullname" . }}-shell-setup
