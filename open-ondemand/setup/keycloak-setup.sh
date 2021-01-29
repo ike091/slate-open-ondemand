@@ -73,7 +73,7 @@ then
 fi
 
 # Get ldap user-storage id
-ldap_id=$($keycloak get components -r ondemand --fields id,name | paste - - | grep "kerberos-ldap-provider" | tr -d '"' | tr -d ":," | sed -e 's/name//g' | sed -e 's/kerberos-ldap-provider//g' | sed -e 's/\bid//g' | awk '{$1=$1};1')
+ldap_id=$($keycloak get components -r ondemand --fields id,name | awk '/,$/ { printf("%s\t", $0); next } 1' | grep "kerberos-ldap-provider" | tr -d '"' | tr -d ":," | sed -e 's/name//g' | sed -e 's/kerberos-ldap-provider//g' | sed -e 's/\bid//g' | awk '{$1=$1};1')
 
 # Update Keycloak user-storage
 $keycloak create user-storage/$ldap_id/sync?action=triggerChangedUsersSync -r ondemand
