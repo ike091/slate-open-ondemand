@@ -79,4 +79,4 @@ ldap_id=$($keycloak get components -r ondemand --fields id,name | paste - - | gr
 $keycloak create user-storage/$ldap_id/sync?action=triggerChangedUsersSync -r ondemand
 
 # Copy LDAP usernames into /shared directory
-echo $($keycloak get users -r ondemand | grep username | tr -d '"' | tr -d ',' | tr -d ':' | sed -e "s/username//g" | awk '{$1=$1};1') >> /shared/users.txt
+echo $($keycloak get users -r ondemand | grep username | tr -d '"' | tr -d ',' | tr -d ':' | sed -e "s/username//g" | awk '{$1=$1};1') > /shared/users.txt
