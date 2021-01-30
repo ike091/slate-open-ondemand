@@ -35,9 +35,9 @@ data:
         n=0
         until [ "$n" -ge 5 ]
         do
-            $keycloak config credentials --server $server --realm $realm --user $user --password $password && break
-            n=$((n+1)) 
-            sleep 5
+                $keycloak config credentials --server $server --realm $realm --user $user --password $password && break
+                n=$((n+1)) 
+                sleep 5
         done
 
         # Create Open-OnDemand realm
