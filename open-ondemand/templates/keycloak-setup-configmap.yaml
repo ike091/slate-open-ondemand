@@ -9,15 +9,10 @@ data:
 
         # Sets up Keycloak to allow Open OnDemand to authenticate through it.
 
+        # TODO: ensure that this script can safely be run twice
         # TODO: save Keycloak admin password in a SLATE secret somehow?
 
-        # Make sure script hasn't already been run
-        if test -f "/shared/id"; then
-                echo "Keycloak is already configured. Skipping setup."
-                exit 0
-        fi
-        echo "Configuring Keycloak..."
-
+        
         # Path to jboss-cli tool:
         jboss_cli="/opt/jboss/keycloak/bin/jboss-cli.sh"
 
@@ -26,6 +21,7 @@ data:
         $jboss_cli 'embed-server,/socket-binding-group=standard-sockets/socket-binding=proxy-https:add(port=443)'
         $jboss_cli 'embed-server,/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=redirect-socket,value=proxy-https)'
 
+        
         # Path to keycloak-cli tool:
         keycloak="/opt/jboss/keycloak/bin/kcadm.sh"
 
@@ -49,7 +45,7 @@ data:
 
         # TODO: adjust login parameters in ondemand realm ("remember me: ON", "login with email: OFF")
 
-
+        
         # Open OnDemand client id
         client_id=$SLATE_INSTANCE_NAME.ondemand.$SLATE_CLUSTER_NAME
 
@@ -78,18 +74,18 @@ data:
         echo $client_secret > /shared/client-secret
 
         # Configure Utah LDAP if requested
-        if [[ $SLATE_SETUP_LDAP == "true" ]];
+        if [[ $SLATE_SETUP_UTAH_LDAP == "true" ]];
         then
-                $keycloak create components -r ondemand -s name=kerberos-ldap-provider -s providerId=ldap -s providerType=org.keycloak.storage.UserStorageProvider -s 'config.priority=["0"]' -s 'config.enabled=["true"]' -s 'config.fullSyncPeriod=["-1"]' -s 'config.changedSyncPeriod=["-1"]' -s 'config.cachePolicy=["DEFAULT"]' -s 'config.batchSizeForSync=["1000"]' -s 'config.editMode=["READ_ONLY"]' -s 'config.syncRegistrations=["false"]' -s 'config.vendor=["other"]' -s 'config.usernameLDAPAttribute=["uid"]' -s 'config.rdnLDAPAttribute=[{{ .Values.ldap.rdnLDAPAttribute | quote }}]' -s 'config.uuidLDAPAttribute=[{{ .Values.ldap.uuidLDAPAttribute | quote }}]' -s 'config.userObjectClasses=[{{ .Values.ldap.userObjectClasses | quote }}]' -s 'config.connectionUrl=[{{ .Values.ldap.connectionURL | quote }}]' -s 'config.usersDn=[{{ .Values.ldap.usersDN | quote }}]' -s 'config.authType=["none"]' -s 'config.searchScope=["1"]' -s 'config.useTruststoreSpi=["ldapsOnly"]' -s 'config.connectionPooling=["true"]' -s 'config.pagination=["true"]' -s 'config.allowKerberosAuthentication=["true"]' -s 'config.serverPrincipal=[{{ .Values.kerberos.serverPrincipal | quote }}]' -s 'config.keyTab=[{{ .Values.kerberos.keyTab | quote }}]' -s 'config.kerberosRealm=[{{ .Values.kerberos.realm | quote }}]' -s 'config.debug=[{{ .Values.kerberos.debug | quote }}]' -s 'config.useKerberosForPasswordAuthentication=[{{ .Values.kerberos.kerberosPasswordAuth | quote }}]' -s 'config.importEnabled=[{{ .Values.ldap.importUsers | quote }}]'
+            $keycloak create components -r ondemand -s name=kerberos-ldap-provider -s providerId=ldap -s providerType=org.keycloak.storage.UserStorageProvider -s 'config.priority=["0"]' -s 'config.enabled=["true"]' -s 'config.fullSyncPeriod=["-1"]' -s 'config.changedSyncPeriod=["-1"]' -s 'config.cachePolicy=["DEFAULT"]' -s 'config.batchSizeForSync=["1000"]' -s 'config.editMode=["READ_ONLY"]' -s 'config.syncRegistrations=["false"]' -s 'config.vendor=["other"]' -s 'config.usernameLDAPAttribute=["uid"]' -s 'config.rdnLDAPAttribute=["uid"]' -s 'config.uuidLDAPAttribute=["uidNumber"]' -s 'config.userObjectClasses=["inetOrgPerson, organizationalPerson"]' -s 'config.connectionUrl=["ldap://ldap.chpc.utah.edu"]' -s 'config.usersDn=["ou=People,dc=chpc,dc=utah,dc=edu"]' -s 'config.authType=["none"]' -s 'config.searchScope=["1"]' -s 'config.useTruststoreSpi=["ldapsOnly"]' -s 'config.connectionPooling=["true"]' -s 'config.pagination=["true"]' -s 'config.allowKerberosAuthentication=["true"]' -s 'config.serverPrincipal=["HTTP/utah-dev.chpc.utah.edu@AD.UTAH.EDU"]' -s 'config.keyTab=["/etc/krb5.keytab"]' -s 'config.kerberosRealm=["AD.UTAH.EDU"]' -s 'config.debug=["true"]' -s 'config.useKerberosForPasswordAuthentication=["true"]' -s 'config.importEnabled=["true"]'
         fi
 
         # Get ldap user-storage id
         sleep 10
         ldap_id=$($keycloak get components -r ondemand --fields id,name | awk '/,$/ { printf("%s\t", $0); next } 1' | grep "kerberos-ldap-provider" | tr -d '"' | tr -d ":," | sed -e 's/name//g' | sed -e 's/kerberos-ldap-provider//g' | sed -e 's/\bid//g' | awk '{$1=$1};1')
-        
+
         # Update Keycloak user-storage
         sleep 5
         $keycloak create user-storage/$ldap_id/sync?action=triggerChangedUsersSync -r ondemand
-        
+
         # Copy LDAP usernames into /shared directory
-        echo $($keycloak get users -r ondemand | grep username | tr -d '"' | tr -d ',' | tr -d ':' | sed -e "s/username//g" | awk '{$1=$1};1') > /shared/users.txt
+        echo $($keycloak get users -r ondemand --limit 10000 | grep username | tr -d '"' | tr -d ',' | tr -d ':' | sed -e "s/username//g" | awk '{$1=$1};1') > /shared/users.txt
