@@ -81,4 +81,4 @@ sleep 5
 $keycloak create user-storage/$ldap_id/sync?action=triggerChangedUsersSync -r ondemand
 
 # Copy LDAP usernames into /shared directory
-echo $($keycloak get users -r ondemand | grep username | tr -d '"' | tr -d ',' | tr -d ':' | sed -e "s/username//g" | awk '{$1=$1};1') > /shared/users.txt
+echo $($keycloak get users -r ondemand --limit 10000 | grep username | tr -d '"' | tr -d ',' | tr -d ':' | sed -e "s/username//g" | awk '{$1=$1};1') > /shared/users.txt
