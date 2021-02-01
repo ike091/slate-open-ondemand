@@ -55,9 +55,6 @@ spec:
             - name: shell-app-setup
               mountPath: /etc/ood/config/clusters.d/clusters.yaml
               subPath: clusters.yaml
-            - name: sssd-config
-              mountPath: /etc/sssd/sssd.conf
-              subPath: sssd.conf
           ports:
             - name: http
               containerPort: 80
