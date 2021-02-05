@@ -91,8 +91,6 @@ data:
 
         # Copy LDAP usernames into /shared directory
         users=$($keycloak get users -r ondemand --limit 10000 | grep username | tr -d '"' | tr -d ',' | tr -d ':' | sed -e "s/username//g" | awk '{$1=$1};1')
-        echo $users >> /shared/users.txt
-        chmod 0700 /shared/users.txt
 
         # Turn users into /etc/passwd format
         total_uids=$((1001+$(echo $users | tr " " "\n" | wc -l)))
