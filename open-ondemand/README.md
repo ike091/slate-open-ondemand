@@ -25,7 +25,7 @@ This application additionally requires a SLATE volume to persist authentication 
 
 ## Configuration
 
-The following table lists the configurable parameters of the Open OnDemand application and their default       values.
+The following table lists the configurable parameters of the Open OnDemand application and their default values.
 
 |           Parameter           |           Description           |           Default           |
 |-------------------------------|---------------------------------|-----------------------------|
@@ -46,3 +46,6 @@ The following table lists the configurable parameters of the Open OnDemand appli
 |`kerberos.keyTab`| Kerberos configuration |`/etc/krb5.keytab`| 
 |`kerberos.kerberosPasswordAuth`| Use Kerberos for password authentication. |`true`| 
 |`kerberos.debug`| Writes additional debug logs if enabled. |`true`| 
+|`cluster1.name`| Name of cluster to connect to. |`Kingspeak`| 
+|`cluster1.host`| Hostname of cluster to connect to. |`kingspeak.chpc.utah.edu`| 
+
