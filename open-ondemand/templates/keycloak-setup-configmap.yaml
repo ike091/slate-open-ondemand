@@ -104,5 +104,5 @@ data:
         done
         declare -p uids
         for i in ${!users[@]}; do
-            echo "${users[$i]}::${uids[$i]}:${uids[$i]}:/home/${users[$i]}:/bin/bash" >> /shared/newusers.txt
+            echo "${users[$i]}::${uids[$i]}:${uids[$i]}::/home/${users[$i]}:/bin/bash" >> /shared/newusers.txt
         done
