@@ -31,14 +31,14 @@ spec:
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-shell-setup
             items:
-            - key: cluster1.yaml
-              path: cluster1.yaml
+            - key: cluster1.yml
+              path: cluster1.yml
         - name: cluster2-setup
           configMap:
             name: {{ include "open-ondemand.fullname" . }}-shell-setup
             items:
-            - key: cluster2.yaml
-              path: cluster2.yaml
+            - key: cluster2.yml
+              path: cluster2.yml
         # Claim SLATE volume to persist Keycloak data.
         - name: keycloak-db
           persistentVolumeClaim:
@@ -54,11 +54,11 @@ spec:
               mountPath: /etc/ood/config/ood_portal.yml
               subPath: ood_portal.yml
             - name: cluster1-setup
-              mountPath: /etc/ood/config/clusters.d/cluster1.yaml
-              subPath: cluster1.yaml
+              mountPath: /etc/ood/config/clusters.d/cluster1.yml
+              subPath: cluster1.yml
             - name: cluster2-setup
-              mountPath: /etc/ood/config/clusters.d/cluster2.yaml
-              subPath: cluster2.yaml
+              mountPath: /etc/ood/config/clusters.d/cluster2.yml
+              subPath: cluster2.yml
           ports:
             - name: http
               containerPort: 80
