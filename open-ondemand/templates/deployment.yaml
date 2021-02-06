@@ -30,7 +30,7 @@ spec:
         {{ range .Values.clusters }}
         - name: cluster-{{ .cluster.name }}-setup
           configMap:
-            name: {{ include "open-ondemand.fullname" . }}-shell-setup
+            name: {{ include "open-ondemand.fullname" $ }}-shell-setup
             items:
             - key: cluster-{{ .cluster.name }}.yml
               path: cluster-{{ .cluster.name }}.yml
