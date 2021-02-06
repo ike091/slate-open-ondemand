@@ -4,9 +4,8 @@ metadata:
   name: {{ include "open-ondemand.fullname" . }}-shell-setup
 data:
 
-  {{ $counter := int64 1 }}
   {{ range .Values.clusters }}
-  cluster{{ $counter }}.yml: |
+  cluster-{{ .cluster.name }}.yml: |
     ---
     v2:
       metadata:
@@ -15,5 +14,4 @@ data:
       login:
         host: {{ .cluster.host | quote }}
     ---
-  {{ add1 $counter }}
   {{ end }}
